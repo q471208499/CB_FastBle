@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite2">
+
+    <Button
+        android:id="@+id/ble_scan_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="开始扫描"
+        app:layout_constraintLeft_toRightOf="@+id/ble_switch_respond"
+        app:layout_constraintRight_toLeftOf="@+id/img_loading"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/ble_switch_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:showText="true"
+        android:text="过滤"
+        android:textOff="关"
+        android:textOn="开"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/ble_switch_respond"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/ble_switch_respond"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:showText="true"
+        android:text="回应"
+        android:textOff="关"
+        android:textOn="开"
+        app:layout_constraintLeft_toRightOf="@+id/ble_switch_filter"
+        app:layout_constraintRight_toLeftOf="@+id/ble_scan_btn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="发现0次ad，耗时：0s"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/ble_scan_btn"
+        app:layout_constraintTop_toBottomOf="@+id/ble_switch_filter" />
+
+    <ImageView
+        android:id="@+id/img_loading"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/ic_loading"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/ble_scan_btn"
+        app:layout_constraintLeft_toRightOf="@+id/ble_scan_btn"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ble_scan_btn" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ble_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ble_scan_btn"
+        tools:listitem="@layout/item_recycler_ble" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

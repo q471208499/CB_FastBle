@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_white"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/item_dev_num"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="表编号：112233445566"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/item_rssi"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/item_rssi"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="信号强度：-59"
+        app:layout_constraintBaseline_toBaselineOf="@+id/item_dev_num"
+        app:layout_constraintLeft_toRightOf="@+id/item_dev_num"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/item_ysl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="用水量：15080.156L"
+        app:layout_constraintLeft_toLeftOf="@+id/item_dev_num"
+        app:layout_constraintRight_toLeftOf="@+id/item_vv"
+        app:layout_constraintTop_toBottomOf="@+id/item_dev_num" />
+
+    <TextView
+        android:id="@+id/item_vv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="电池电压：3.6V"
+        app:layout_constraintBaseline_toBaselineOf="@+id/item_ysl"
+        app:layout_constraintLeft_toRightOf="@+id/item_ysl"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/item_times"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1次"
+        android:textColor="@android:color/holo_red_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
