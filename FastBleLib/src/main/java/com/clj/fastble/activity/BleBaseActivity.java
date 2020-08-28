@@ -217,10 +217,10 @@ public class BleBaseActivity extends BaseActivity {
     }
 
     private boolean checkGPSIsOpen() {
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (locationManager == null)
-            return false;
-        return locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+            return true;
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     private void checkPermissions() {
