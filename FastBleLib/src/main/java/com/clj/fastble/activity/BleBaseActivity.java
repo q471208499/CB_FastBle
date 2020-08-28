@@ -153,7 +153,7 @@ public class BleBaseActivity extends BaseActivity {
     private void onPermissionGranted(String permission) {
         switch (permission) {
             case Manifest.permission.ACCESS_FINE_LOCATION:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkGPSIsOpen()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !checkGPSIsOpen()) {
                     new AlertDialog.Builder(this)
                             .setTitle(R.string.notifyTitle)
                             .setMessage(R.string.gpsNotifyMsg)
