@@ -98,8 +98,8 @@ public class BleBaseActivity extends BaseActivity {
     }
 
     private boolean checkGPS() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkGPSIsOpen()) {
-            return false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return checkGPSIsOpen();
         }
         return true;
     }
