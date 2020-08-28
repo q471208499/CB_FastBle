@@ -1,6 +1,4 @@
-package com.clj.blesample.uitls;
-
-import com.clj.fastble.utils.HexUtil;
+package com.clj.fastble.utils;
 
 import java.math.BigInteger;
 

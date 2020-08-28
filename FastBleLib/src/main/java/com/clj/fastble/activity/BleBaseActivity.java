@@ -1,4 +1,4 @@
-package com.clj.blesample.activity;
+package com.clj.fastble.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -17,8 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.clj.blesample.R;
 import com.clj.fastble.BleManager;
+import com.clj.fastble.R;
 import com.clj.fastble.scan.BleScanRuleConfig;
 
 import java.util.ArrayList;
@@ -175,7 +175,6 @@ public class BleBaseActivity extends BaseActivity {
             ActivityCompat.requestPermissions(this, deniedPermissions, REQUEST_CODE_PERMISSION_LOCATION);
         }
     }
-
 
 
 }

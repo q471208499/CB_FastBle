@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.clj.blesample.R;
-import com.clj.blesample.uitls.BytesADUtils;
+import com.clj.fastble.utils.BytesADUtils;
 
 public class MyAdActivity extends AppCompatActivity {
     BluetoothLeAdvertiser mBluetoothLeAdvertiser;

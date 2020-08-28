@@ -28,6 +28,7 @@ import com.clj.blesample.R;
 import com.clj.blesample.adapter.BleLZAdapter;
 import com.clj.blesample.data.MyBleDevice;
 import com.clj.fastble.BleManager;
+import com.clj.fastble.activity.BleBaseActivity;
 import com.clj.fastble.callback.BleScanCallback;
 import com.clj.fastble.data.BleDevice;
 

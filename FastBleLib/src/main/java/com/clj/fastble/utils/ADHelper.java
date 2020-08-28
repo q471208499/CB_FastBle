@@ -1,4 +1,4 @@
-package com.clj.blesample.uitls;
+package com.clj.fastble.utils;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -8,8 +8,6 @@ import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.content.Context;
 import android.util.Log;
-
-import com.clj.fastble.utils.HexUtil;
 
 public class ADHelper {
     private final String TAG = getClass().getSimpleName();

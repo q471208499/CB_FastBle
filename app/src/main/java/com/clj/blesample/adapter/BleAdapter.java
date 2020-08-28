@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.clj.blesample.R;
 import com.clj.blesample.data.MyBleDevice;
-import com.clj.blesample.uitls.ADHelper;
-import com.clj.blesample.uitls.BytesScanUtils;
+import com.clj.fastble.utils.ADHelper;
+import com.clj.fastble.utils.BytesScanUtils;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.utils.HexUtil;
 

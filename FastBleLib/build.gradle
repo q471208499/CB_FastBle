@@ -20,4 +20,5 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.github.q471208499:AndBaseCB:1.0.14'
 }

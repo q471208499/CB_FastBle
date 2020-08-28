@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,18 +15,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.clj.blesample.R;
 import com.clj.blesample.comm.ObserverManager;
 import com.clj.blesample.data.MyBleDevice;
-import com.clj.blesample.uitls.ADHelper;
-import com.clj.blesample.uitls.BytesScanUtils;
+import com.clj.fastble.utils.ADHelper;
+import com.clj.fastble.utils.BytesScanUtils;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleGattCallback;
 import com.clj.fastble.callback.BleNotifyCallback;
-import com.clj.fastble.callback.BleReadCallback;
 import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
@@ -36,7 +33,6 @@ import com.clj.fastble.utils.LzBleHelper;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.UUID;
 
 import cn.cb.baselibrary.utils.ABDateUtils;
 import es.dmoral.toasty.MyToast;
