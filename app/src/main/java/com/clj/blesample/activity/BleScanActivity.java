@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.clj.blesample.R;
-import com.clj.blesample.adapter.BleAdapter;
+import com.clj.blesample.adapter.BleLZAdapter;
 import com.clj.blesample.data.MyBleDevice;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleScanCallback;
@@ -40,7 +40,7 @@ import es.dmoral.toasty.MyToast;
 public class BleScanActivity extends BleBaseActivity {
 
     private final String TAG = getClass().getSimpleName();
-    private BleAdapter adapter;
+    private BleLZAdapter adapter;
     private ImageView imgLoading;
     private Switch filterSwitch, respondSwitch;
     private Button button;
@@ -59,7 +59,7 @@ public class BleScanActivity extends BleBaseActivity {
     private void bindView() {
         operatingAnim = AnimationUtils.loadAnimation(this, R.anim.rotate);
         operatingAnim.setInterpolator(new LinearInterpolator());
-        adapter = new BleAdapter(this, list);
+        adapter = new BleLZAdapter(this, list);
         imgLoading = findViewById(R.id.img_loading);
         total = findViewById(R.id.text_total);
         filterSwitch = findViewById(R.id.ble_switch_filter);
@@ -208,5 +208,6 @@ public class BleScanActivity extends BleBaseActivity {
             super.onScanFailed(errorCode);
         }
     };
+
 
 }

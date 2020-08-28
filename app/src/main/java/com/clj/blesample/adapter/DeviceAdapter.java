@@ -2,7 +2,6 @@ package com.clj.blesample.adapter;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,23 +11,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.clj.blesample.R;
-import com.clj.blesample.data.MyBleDevice;
-import com.clj.blesample.uitls.ADHelper;
-import com.clj.blesample.uitls.BytesScanUtils;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.data.BleDevice;
-import com.clj.fastble.utils.HexUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cb.baselibrary.utils.ABDateUtils;
-
 public class DeviceAdapter extends BaseAdapter {
-    private final String TAG = getClass().getSimpleName();
 
     private Context context;
-    private List<MyBleDevice> bleDeviceList;
+    private List<BleDevice> bleDeviceList;
 
     public DeviceAdapter(Context context) {
         this.context = context;
@@ -36,44 +28,8 @@ public class DeviceAdapter extends BaseAdapter {
     }
 
     public void addDevice(BleDevice bleDevice) {
-        //removeDevice(bleDevice);
-        //bleDeviceList.add(bleDevice);
-        //notifyDataSetChanged();
-    }
-
-    public void addDevAndTimes(BleDevice bleDevice, boolean debug) {
-        if (debug) {
-            BytesScanUtils scanUtils = new BytesScanUtils(bleDevice.getScanRecord());
-            boolean isOrder02;
-            if (!scanUtils.isValid()) {
-                return;
-            } else {
-                Log.i(TAG, "###addDevAndTimes: " + HexUtil.formatHexString(bleDevice.getScanRecord(), true));
-                isOrder02 = scanUtils.getOrder().equals(BytesScanUtils.ORDER_02);
-                if (isOrder02) {
-                    ADHelper helper = new ADHelper(context);
-                    String dateStr = ABDateUtils.getCurDateStr("yyyyMMddHHmmss");
-                    String macStr = bleDevice.getMac().replaceAll(":", "");
-                    Log.i(TAG, "###addDevAndTimes: date/" + dateStr + " - macStr/" + macStr);
-                    helper.startAction0x10(dateStr, macStr);
-                    helper.stopAction();
-                }
-            }
-        }
-        for (int i = 0; i < bleDeviceList.size(); i++) {
-            MyBleDevice device = bleDeviceList.get(i);
-            if (device.getMac().equals(bleDevice.getMac())) {
-                int times = device.getTimes() + 1;
-                MyBleDevice newBle = new MyBleDevice(bleDevice);
-                newBle.setTimes(times);
-                bleDeviceList.set(i, newBle);
-                notifyDataSetChanged();
-                return;
-            }
-        }
-        MyBleDevice newBle = new MyBleDevice(bleDevice);
-        bleDeviceList.add(newBle);
-        notifyDataSetChanged();
+        removeDevice(bleDevice);
+        bleDeviceList.add(bleDevice);
     }
 
     public void removeDevice(BleDevice bleDevice) {
@@ -114,7 +70,7 @@ public class DeviceAdapter extends BaseAdapter {
     }
 
     @Override
-    public MyBleDevice getItem(int position) {
+    public BleDevice getItem(int position) {
         if (position > bleDeviceList.size())
             return null;
         return bleDeviceList.get(position);
@@ -143,11 +99,9 @@ public class DeviceAdapter extends BaseAdapter {
             holder.btn_disconnect = (Button) convertView.findViewById(R.id.btn_disconnect);
             holder.btn_connect = (Button) convertView.findViewById(R.id.btn_connect);
             holder.btn_detail = (Button) convertView.findViewById(R.id.btn_detail);
-            holder.txt_scanRecord = convertView.findViewById(R.id.txt_scan_record);
-            holder.txt_times = convertView.findViewById(R.id.txt_times);
         }
 
-        MyBleDevice bleDevice = getItem(position);
+        final BleDevice bleDevice = getItem(position);
         if (bleDevice != null) {
             boolean isConnected = BleManager.getInstance().isConnected(bleDevice);
             String name = bleDevice.getName();
@@ -169,15 +123,13 @@ public class DeviceAdapter extends BaseAdapter {
                 holder.layout_idle.setVisibility(View.VISIBLE);
                 holder.layout_connected.setVisibility(View.GONE);
             }
-            holder.txt_scanRecord.setText(HexUtil.formatHexString(bleDevice.getScanRecord(), true));
-            holder.txt_times.setText(bleDevice.getTimes() + "次");
         }
 
         holder.btn_connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mListener != null) {
-                    //mListener.onConnect(bleDevice);
+                    mListener.onConnect(bleDevice);
                 }
             }
         });
@@ -186,7 +138,7 @@ public class DeviceAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 if (mListener != null) {
-                    //mListener.onDisConnect(bleDevice);
+                    mListener.onDisConnect(bleDevice);
                 }
             }
         });
@@ -195,7 +147,7 @@ public class DeviceAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 if (mListener != null) {
-                    //mListener.onDetail(bleDevice);
+                    mListener.onDetail(bleDevice);
                 }
             }
         });
@@ -208,7 +160,6 @@ public class DeviceAdapter extends BaseAdapter {
         TextView txt_name;
         TextView txt_mac;
         TextView txt_rssi;
-        TextView txt_scanRecord, txt_times;
         LinearLayout layout_idle;
         LinearLayout layout_connected;
         Button btn_disconnect;

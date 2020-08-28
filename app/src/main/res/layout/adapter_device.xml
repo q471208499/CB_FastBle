@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="56dp">
 
         <ImageView
             android:id="@+id/img_blue"
@@ -37,15 +37,6 @@
                 android:layout_marginTop="2dp"
                 android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/txt_scan_record"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="1111111122222211111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
-                11111111111113333"
-                android:textSize="12sp" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -55,7 +46,7 @@
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/txt_rssi"
@@ -69,22 +60,13 @@
                 android:layout_marginLeft="5dp"
                 android:src="@mipmap/ic_rssi" />
 
-            <TextView
-                android:id="@+id/txt_times"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:text="11次"
-                android:textColor="@android:color/holo_red_light" />
-
             <Button
                 android:id="@+id/btn_connect"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="@string/connect"
-                android:textSize="12sp"
-                android:visibility="gone" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -94,8 +76,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"

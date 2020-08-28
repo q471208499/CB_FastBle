@@ -34,7 +34,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.clj.blesample.activity.MyAdActivity;
 import com.clj.blesample.adapter.DeviceAdapter;
 import com.clj.blesample.comm.ObserverManager;
 import com.clj.blesample.operation.OperationActivity;
@@ -69,15 +68,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DeviceAdapter mDeviceAdapter;
     private ProgressDialog progressDialog;
 
-    private Switch switch_debug;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
 
-        //ADHelper.createInstance(this);
         BleManager.getInstance().init(getApplication());
         BleManager.getInstance()
                 .enableLog(true)
@@ -126,19 +122,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        switch_debug = findViewById(R.id.switch_debug);
         btn_scan = (Button) findViewById(R.id.btn_scan);
         btn_scan.setText(getString(R.string.start_scan));
         btn_scan.setOnClickListener(this);
-        btn_scan.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                //startScan();
-                //BleManager.getInstance().cancelScan();
-                startActivity(new Intent(MainActivity.this, MyAdActivity.class));
-                return false;
-            }
-        });
 
         et_name = (EditText) findViewById(R.id.et_name);
         et_mac = (EditText) findViewById(R.id.et_mac);
@@ -234,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setDeviceName(true, names)   // 只扫描指定广播名的设备，可选
                 .setDeviceMac(mac)                  // 只扫描指定mac的设备，可选
                 .setAutoConnect(isAutoConnect)      // 连接时的autoConnect参数，可选，默认false
-                .setScanTimeOut(0)              // 扫描超时时间，可选，默认10秒
+                .setScanTimeOut(10000)              // 扫描超时时间，可选，默认10秒
                 .build();
         BleManager.getInstance().initScanRule(scanRuleConfig);
     }
@@ -253,13 +239,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onLeScan(BleDevice bleDevice) {
                 super.onLeScan(bleDevice);
-                mDeviceAdapter.addDevAndTimes(bleDevice, switch_debug.isChecked());
             }
 
             @Override
             public void onScanning(BleDevice bleDevice) {
                 mDeviceAdapter.addDevice(bleDevice);
-                //mDeviceAdapter.addDevAndTimes(bleDevice);
+                mDeviceAdapter.notifyDataSetChanged();
             }
 
             @Override

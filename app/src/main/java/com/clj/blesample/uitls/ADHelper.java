@@ -14,7 +14,6 @@ import com.clj.fastble.utils.HexUtil;
 public class ADHelper {
     private final String TAG = getClass().getSimpleName();
 
-    private static ADHelper instance;
     private BluetoothLeAdvertiser mBluetoothLeAdvertiser;
     private Context mContext;
 
@@ -22,24 +21,6 @@ public class ADHelper {
         this.mContext = context;
         getAdvertiser();
     }
-
-    /*public static ADHelper getInstance() {
-        if (instance == null) {
-            throw new NullPointerException("instance is null, should createInstance at first.");
-        }
-        return instance;
-    }*/
-
-    /*public static ADHelper createInstance(Context context) {
-        if (instance == null) {
-            synchronized (ADHelper.class) {
-                if (instance == null) {
-                    instance = new ADHelper(context);
-                }
-            }
-        }
-        return instance;
-    }*/
 
     public void startActionTest() {
         startAction(new BytesADUtils("200527").get0x10Bytes());
@@ -49,9 +30,13 @@ public class ADHelper {
         startAction(new BytesADUtils(data, mac).get0x10Bytes());
     }
 
+    public void startAction0x11(String data, String mac) {
+        startAction(new BytesADUtils(data, mac).get0x11Bytes());
+    }
+
     public void startAction(byte[] data) {
         Log.i(TAG, "###startAction: " + HexUtil.encodeHexStr(data));
-        AdvertiseSettings settings = createAdvSettings(true, 301);
+        AdvertiseSettings settings = createAdvSettings(true, 3 * 1000);
         AdvertiseData advertiseData = createAdvertiseData(data);
         AdvertiseCallback callback = mAdvertiseCallback;
         mBluetoothLeAdvertiser.startAdvertising(settings, advertiseData, callback);

@@ -102,7 +102,7 @@ public class BleAdapter extends RecyclerView.Adapter {
                     String dateStr = ABDateUtils.getCurDateStr("yyyyMMddHHmmss");
                     String macStr = bleDevice.getMac().replaceAll(":", "");
                     Log.i(TAG, "###addItem: date/" + dateStr + " - macStr/" + macStr);
-                    helper.startAction0x10(dateStr, macStr);
+                    helper.startAction0x11(dateStr, macStr);
                     helper.stopAction();
                 }
             }
