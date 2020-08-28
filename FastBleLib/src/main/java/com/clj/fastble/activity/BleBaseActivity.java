@@ -43,7 +43,7 @@ public class BleBaseActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        checkPermissions();
+        //checkPermissions();
         BleManager.getInstance().init(getApplication());
         BleManager.getInstance()
                 .enableLog(false)
