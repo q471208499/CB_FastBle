@@ -81,7 +81,7 @@ public class BleBaseActivity extends BaseActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                MyToast.show("权限不足，请重试后允许！");
+                                MyToast.show(R.string.no_permission);
                             }
                         })
                 .setPositiveButton(R.string.setting,
@@ -140,7 +140,7 @@ public class BleBaseActivity extends BaseActivity {
                         if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                             onPermissionGranted(permissions[i]);
                         } else {
-                            MyToast.show("权限不足，请重试后允许！");
+                            MyToast.show(R.string.no_permission);
                         }
                     }
                 }
@@ -167,7 +167,7 @@ public class BleBaseActivity extends BaseActivity {
                 .setReportDelay(0)
                 .build();
         leScanner.startScan(null, settings, callback);
-        MyToast.show("开始扫描");
+        MyToast.show(R.string.start_scan);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -175,7 +175,7 @@ public class BleBaseActivity extends BaseActivity {
                 if (leScanner != null) {
                     leScanner.stopScan(callback);
                 }
-                MyToast.show("停止扫描");
+                MyToast.show(R.string.stop_scan);
             }
         }, SCAN_TIME);
     }
