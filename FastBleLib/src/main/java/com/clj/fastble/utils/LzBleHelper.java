@@ -255,7 +255,7 @@ public class LzBleHelper {
 
         private boolean checkOuter() {
             byte[] bytes = bleList.get(bleList.size() - 1);
-            String hexStr = HexUtil.bcd2Str(bytes);
+            String hexStr = HexUtil.formatHexString(bytes).toUpperCase();
             int bleHeadIndex = hexStr.indexOf(BLE_HEAD_STR);
             int bleEndIndex = hexStr.lastIndexOf(BLE_END_STR);
             if (bleHeadIndex >= bleEndIndex) {
