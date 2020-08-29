@@ -38,7 +38,7 @@ public class BleBaseActivity extends BaseActivity {
     private static final int REQUEST_CODE_OPEN_GPS = 2001;
     private static final int REQUEST_CODE_PERMISSION_LOCATION = 2002;
     private final int REQUEST_ENABLE_BT = 2009;
-    private final int SCAN_TIME = 10000;//每次扫描时间
+    protected final int SCAN_TIME = 10000;//每次扫描时间
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,8 +104,8 @@ public class BleBaseActivity extends BaseActivity {
         return true;
     }
 
-    private BluetoothAdapter bluetoothAdapter;
-    private BluetoothLeScanner leScanner;
+    protected BluetoothAdapter bluetoothAdapter;
+    protected BluetoothLeScanner leScanner;
 
     /**
      * 打开蓝牙
