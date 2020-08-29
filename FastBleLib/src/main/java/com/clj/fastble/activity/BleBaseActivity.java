@@ -160,7 +160,7 @@ public class BleBaseActivity extends BaseActivity {
         }
     }
 
-    private void startScanBLE() {
+    protected void startScanBLE() {
         leScanner = bluetoothAdapter.getBluetoothLeScanner();
         ScanSettings settings = new ScanSettings.Builder()
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
@@ -172,8 +172,9 @@ public class BleBaseActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (leScanner != null)
+                if (leScanner != null) {
                     leScanner.stopScan(callback);
+                }
                 MyToast.show("停止扫描");
             }
         }, SCAN_TIME);
