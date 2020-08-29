@@ -2,8 +2,6 @@ package com.clj.fastble.utils;
 
 import android.bluetooth.BluetoothDevice;
 
-import com.clj.fastble.data.BleDevice;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -242,7 +240,7 @@ public class LzBleHelper {
     }
 
     public static class Receive {
-        private List<BleDevice> bleList = new ArrayList<>();
+        private List<byte[]> bleList = new ArrayList<>();
         private StringBuilder sb = new StringBuilder();//最外层有效数据
         private boolean hasNext = false;
         private boolean conformOuter = false;
@@ -250,14 +248,14 @@ public class LzBleHelper {
         private String meterInfoHex;
         private String meterAddress;
 
-        public Receive(BleDevice device) {
-            this.bleList.add(device);
+        public Receive(byte[] bytes) {
+            this.bleList.add(bytes);
             conformOuter = checkOuter();
         }
 
         private boolean checkOuter() {
-            BleDevice device = bleList.get(bleList.size() - 1);
-            String hexStr = HexUtil.bcd2Str(device.getScanRecord());
+            byte[] bytes = bleList.get(bleList.size() - 1);
+            String hexStr = HexUtil.bcd2Str(bytes);
             int bleHeadIndex = hexStr.indexOf(BLE_HEAD_STR);
             int bleEndIndex = hexStr.lastIndexOf(BLE_END_STR);
             if (bleHeadIndex >= bleEndIndex) {
@@ -276,11 +274,11 @@ public class LzBleHelper {
             return false;
         }
 
-        public boolean addFrame(BleDevice device) {
-            bleList.add(device);
+        public boolean addFrame(byte[] bytes) {
+            bleList.add(bytes);
             conformOuter = checkOuter();
             if (!isConformOuter()) {
-                bleList.remove(device);
+                bleList.remove(bytes);
                 return false;
             }
             return true;

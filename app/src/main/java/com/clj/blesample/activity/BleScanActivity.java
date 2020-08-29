@@ -152,7 +152,7 @@ public class BleScanActivity extends BleBaseActivity {
     }*/
 
 
-    private void startScanBLE() {
+    protected void startScanBLE() {
         leScanner = bluetoothAdapter.getBluetoothLeScanner();
         ScanSettings settings = new ScanSettings.Builder()
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
