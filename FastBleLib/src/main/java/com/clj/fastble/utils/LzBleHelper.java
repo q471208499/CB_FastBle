@@ -63,7 +63,7 @@ public class LzBleHelper {
         if (device == null || device.getName() == null || device.getName().isEmpty()) {
             return false;
         }
-        String miniMac = getMiniMac(device.getAddress());
+        String miniMac = getMiniMac(device.getAddress()).substring(6);
         return device.getName().equals(LZ_BLE_NAME_PREFIX + miniMac);
     }
 
