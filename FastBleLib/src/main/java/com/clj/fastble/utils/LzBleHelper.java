@@ -371,6 +371,27 @@ public class LzBleHelper {
         private String temp;//温度
         private String angle;//角度
 
+        public Bean(String meterCumuUsage, String status0L, String status1L, String status2L,
+                    String status3L, String status4L, String status5L, String status6L,
+                    String status7L, String status0H, String voltage, String temp, String angle) {
+            this.meterCumuUsage = meterCumuUsage;
+            this.status0L = status0L;
+            this.status1L = status1L;
+            this.status2L = status2L;
+            this.status3L = status3L;
+            this.status4L = status4L;
+            this.status5L = status5L;
+            this.status6L = status6L;
+            this.status7L = status7L;
+            this.status0H = status0H;
+            this.voltage = voltage;
+            this.temp = temp;
+            this.angle = angle;
+        }
+
+        public Bean() {
+        }
+
         public Bean(String hexStr) {
             String meterCumuUsageHex = hexStr.substring(14, 22);
             String statusHex = hexStr.substring(22, 26);
