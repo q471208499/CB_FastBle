@@ -426,7 +426,7 @@ public class LzBleHelper {
 
         private void setVoltage(String voltageHex, boolean myself) {
             String m = String.valueOf(Integer.parseInt(voltageHex, 16));
-            voltage = new StringBuilder(m).insert(m.length() - 1, ".").toString();
+            voltage = new StringBuilder(m).insert(m.length() - 2, ".").toString();
         }
 
         private void setMeterCumuUsage(String meterCumuUsageHex, boolean myself) {
