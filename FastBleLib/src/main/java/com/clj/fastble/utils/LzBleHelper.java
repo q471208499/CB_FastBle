@@ -460,6 +460,25 @@ public class LzBleHelper {
         public String getAngle() {
             return angle;
         }
+
+        @Override
+        public String toString() {
+            return "Bean{" +
+                    "meterCumuUsage='" + meterCumuUsage + '\'' +
+                    ", status0L='" + status0L + '\'' +
+                    ", status1L='" + status1L + '\'' +
+                    ", status2L='" + status2L + '\'' +
+                    ", status3L='" + status3L + '\'' +
+                    ", status4L='" + status4L + '\'' +
+                    ", status5L='" + status5L + '\'' +
+                    ", status6L='" + status6L + '\'' +
+                    ", status7L='" + status7L + '\'' +
+                    ", status0H='" + status0H + '\'' +
+                    ", voltage='" + voltage + '\'' +
+                    ", temp='" + temp + '\'' +
+                    ", angle='" + angle + '\'' +
+                    '}';
+        }
     }
 
     public static byte[] string2Bytes(String str) {
