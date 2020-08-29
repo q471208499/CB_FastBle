@@ -405,22 +405,12 @@ public class LzBleHelper {
             tempHex = Long.toHexString(getLong(string2Bytes(tempHex), true));
             angleHex = Long.toHexString(getLong(string2Bytes(angleHex), true));
 
-            setStatus(statusHex);
-            setMeterCumuUsage(meterCumuUsageHex);
-            setVoltage(voltageHex);
+            setStatus(statusHex, true);
+            setMeterCumuUsage(meterCumuUsageHex, true);
+            setVoltage(voltageHex, true);
         }
 
-        private void setVoltage(String voltageHex) {
-            String m = String.valueOf(Integer.parseInt(voltageHex, 16));
-            voltage = new StringBuilder(m).insert(m.length() - 1, ".").toString();
-        }
-
-        private void setMeterCumuUsage(String meterCumuUsageHex) {
-            String m = String.valueOf(Integer.parseInt(meterCumuUsageHex, 16));
-            meterCumuUsage = new StringBuilder(m).insert(m.length() - 2, ".").toString();
-        }
-
-        private void setStatus(String statusHex) {
+        private void setStatus(String statusHex, boolean myself) {
             String statusBinLow = byte2Binary(statusHex.substring(0, 2));
             String statusBinHigh = byte2Binary(statusHex.substring(2, 4));
             status0L = statusBinLow.substring(7, 8);
@@ -432,6 +422,68 @@ public class LzBleHelper {
             status6L = statusBinLow.substring(1, 2);
             status7L = statusBinLow.substring(0, 1);
             status0H = statusBinHigh.substring(7, 8);
+        }
+
+        private void setVoltage(String voltageHex, boolean myself) {
+            String m = String.valueOf(Integer.parseInt(voltageHex, 16));
+            voltage = new StringBuilder(m).insert(m.length() - 1, ".").toString();
+        }
+
+        private void setMeterCumuUsage(String meterCumuUsageHex, boolean myself) {
+            String m = String.valueOf(Integer.parseInt(meterCumuUsageHex, 16));
+            meterCumuUsage = new StringBuilder(m).insert(m.length() - 2, ".").toString();
+        }
+
+        public void setMeterCumuUsage(String meterCumuUsage) {
+            this.meterCumuUsage = meterCumuUsage;
+        }
+
+        public void setStatus0L(String status0L) {
+            this.status0L = status0L;
+        }
+
+        public void setStatus1L(String status1L) {
+            this.status1L = status1L;
+        }
+
+        public void setStatus2L(String status2L) {
+            this.status2L = status2L;
+        }
+
+        public void setStatus3L(String status3L) {
+            this.status3L = status3L;
+        }
+
+        public void setStatus4L(String status4L) {
+            this.status4L = status4L;
+        }
+
+        public void setStatus5L(String status5L) {
+            this.status5L = status5L;
+        }
+
+        public void setStatus6L(String status6L) {
+            this.status6L = status6L;
+        }
+
+        public void setStatus7L(String status7L) {
+            this.status7L = status7L;
+        }
+
+        public void setStatus0H(String status0H) {
+            this.status0H = status0H;
+        }
+
+        public void setVoltage(String voltage) {
+            this.voltage = voltage;
+        }
+
+        public void setTemp(String temp) {
+            this.temp = temp;
+        }
+
+        public void setAngle(String angle) {
+            this.angle = angle;
         }
 
         public String getMeterCumuUsage() {
