@@ -346,6 +346,10 @@ public class LzBleHelper {
             return sb.toString();
         }
 
+        public void setMeterAddress(String meterAddress) {
+            this.meterAddress = meterAddress;
+        }
+
         public int getCmd() {
             checkMiddle();
             return Integer.parseInt(cmd, 16);
