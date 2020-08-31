@@ -55,14 +55,14 @@ public class LzBleHelper {
     /**************************【控制码 FINISH】*****************************/
 
     /******************************【判断蓝牙广播是否是莱智 START】*********************************/
-    private static String LZ_BLE_NAME_PREFIX = "XC-LINK-";//莱智蓝牙名称前缀
+    private static String LZ_BLE_NAME_PREFIX = "XC-LINK";//莱智蓝牙名称前缀
 
     public static boolean isLzBle(BluetoothDevice device) {
         if (device == null || device.getName() == null || device.getName().isEmpty()) {
             return false;
         }
-        String miniMac = getMiniMac(device.getAddress()).substring(6);
-        return device.getName().equals(LZ_BLE_NAME_PREFIX + miniMac);
+        //String miniMac = getMiniMac(device.getAddress()).substring(6);
+        return device.getName().startsWith(LZ_BLE_NAME_PREFIX);
     }
 
     private static String getMiniMac(String address) {
