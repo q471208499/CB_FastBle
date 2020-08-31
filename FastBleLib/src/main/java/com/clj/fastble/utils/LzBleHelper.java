@@ -114,10 +114,10 @@ public class LzBleHelper {
         public List<byte[]> signRead() {
             String innerStr = "0511" + meterAddressStr;
             int innerV = getAllCheckValue(innerStr) % 256;
-            String innerVHex = Integer.toHexString(innerV);
+            String innerVHex = String.format("%02dx", innerV);
             String middleStr = "0FF111" + meterAddressStr + DATA_HEAD_STR + innerStr + innerVHex + DATA_END_STR;
             int middleV = getAllCheckValue(middleStr) % 256;
-            String middleVHex = Integer.toHexString(middleV);
+            String middleVHex = String.format("%02dx", middleV);
             String dataStr = DATA_HEAD_STR + middleStr + middleVHex + DATA_END_STR;
             return cutBackage(dataStr);
         }
@@ -130,7 +130,7 @@ public class LzBleHelper {
         public List<byte[]> setSendPower(int l) {
             String dataStr = "0CF12A" + meterAddressStr + "01" + CMD_AUTH + String.format("%02x", l);
             int v = getAllCheckValue(dataStr) % 256;
-            String vHex = Integer.toHexString(v);
+            String vHex = String.format("%02dx", v);
             dataStr = DATA_HEAD_STR + dataStr + vHex + DATA_END_STR;
             return cutBackage(dataStr);
         }
@@ -143,7 +143,7 @@ public class LzBleHelper {
         public List<byte[]> setHandheldId(String handheldId) {
             String dataStr = "061600" + handheldId;
             int v = getAllCheckValue(dataStr) % 256;
-            String vHex = Integer.toHexString(v);
+            String vHex = String.format("%02dx", v);
             dataStr = DATA_HEAD_STR + dataStr + vHex + DATA_END_STR;
             return cutBackage(dataStr);
         }
@@ -156,7 +156,7 @@ public class LzBleHelper {
         public List<byte[]> setRF(int l) {
             String dataStr = "031100" + String.format("%02x", l);
             int v = getAllCheckValue(dataStr) % 256;
-            String vHex = Integer.toHexString(v);
+            String vHex = String.format("%02dx", v);
             dataStr = DATA_HEAD_STR + dataStr + vHex + DATA_END_STR;
             return cutBackage(dataStr);
         }
@@ -218,7 +218,7 @@ public class LzBleHelper {
                 if (dataTemp.length() < DATA_SIZE_IN_FRAME)
                     dataTemp = fill(dataTemp, DATA_SIZE_IN_FRAME, "0");
                 int tempV = getAllCheckValue(dataTemp) % 256;
-                String tempVHex = Integer.toHexString(tempV);
+                String tempVHex = String.format("%02dx", tempV);
                 dataTemp = BLE_HEAD_STR + listSize + (i + 1) + dataTempLengthHex + dataTemp + tempVHex + BLE_END_STR;
                 System.out.println(dataTemp);
                 byte[] bs = HexUtil.str2Bcd(dataTemp);
