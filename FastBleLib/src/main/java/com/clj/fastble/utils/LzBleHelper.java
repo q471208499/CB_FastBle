@@ -26,15 +26,15 @@ public class LzBleHelper {
     /**
      * 蓝牙主服务UUID: '0000FF12-0000-1000-8000-00805F9B34FB'
      */
-    private static final String UUID_SERVER = "0000FF12-0000-1000-8000-00805F9B34FB";
+    public static final String UUID_SERVER = "0000FF12-0000-1000-8000-00805F9B34FB";
     /**
      * 写数据的特征值 0000FF01-0000-1000-8000-00805F9B34FB
      */
-    private static final String UUID_WRITER = "0000FF01-0000-1000-8000-00805F9B34FB";
+    public static final String UUID_WRITER = "0000FF01-0000-1000-8000-00805F9B34FB";
     /**
      * 订阅的特征值 0000FF02-0000-1000-8000-00805F9B34FB
      */
-    private static final String UUID_NOTIFY = "0000FF02-0000-1000-8000-00805F9B34FB";
+    public static final String UUID_NOTIFY = "0000FF02-0000-1000-8000-00805F9B34FB";
 
     /**************************【控制码 START】*****************************/
     public static final int RESPONSE_FAIL = 0xC100;//响应失败
@@ -119,7 +119,7 @@ public class LzBleHelper {
             int middleV = getAllCheckValue(middleStr) % 256;
             String middleVHex = String.format("%02x", middleV);
             String dataStr = DATA_HEAD_STR + middleStr + middleVHex + DATA_END_STR;
-            return cutBackage(dataStr);
+            return cutPackage(dataStr);
         }
 
         /**
@@ -132,7 +132,7 @@ public class LzBleHelper {
             int v = getAllCheckValue(dataStr) % 256;
             String vHex = String.format("%02x", v);
             dataStr = DATA_HEAD_STR + dataStr + vHex + DATA_END_STR;
-            return cutBackage(dataStr);
+            return cutPackage(dataStr);
         }
 
         /**
@@ -145,7 +145,7 @@ public class LzBleHelper {
             int v = getAllCheckValue(dataStr) % 256;
             String vHex = String.format("%02x", v);
             dataStr = DATA_HEAD_STR + dataStr + vHex + DATA_END_STR;
-            return cutBackage(dataStr);
+            return cutPackage(dataStr);
         }
 
         /**
@@ -158,7 +158,7 @@ public class LzBleHelper {
             int v = getAllCheckValue(dataStr) % 256;
             String vHex = String.format("%02x", v);
             dataStr = DATA_HEAD_STR + dataStr + vHex + DATA_END_STR;
-            return cutBackage(dataStr);
+            return cutPackage(dataStr);
         }
 
         /**
@@ -168,7 +168,7 @@ public class LzBleHelper {
          */
         public List<byte[]> setSetting() {
             String dataStr = DATA_HEAD_STR + "0219001B" + DATA_END_STR;
-            return cutBackage(dataStr);
+            return cutPackage(dataStr);
         }
 
         /**
@@ -178,7 +178,7 @@ public class LzBleHelper {
          */
         public List<byte[]> setOperation() {
             String dataStr = DATA_HEAD_STR + "021A001C" + DATA_END_STR;
-            return cutBackage(dataStr);
+            return cutPackage(dataStr);
         }
 
         /**
@@ -208,9 +208,9 @@ public class LzBleHelper {
             return null;
         }
 
-        private List<byte[]> cutBackage(String dataStr) {
+        private List<byte[]> cutPackage(String dataStr) {
             int listSize = dataStr.length() / DATA_SIZE_IN_FRAME + (dataStr.length() % DATA_SIZE_IN_FRAME == 0 ? 0 : 1);
-            List<byte[]> result = new ArrayList<byte[]>(listSize);
+            List<byte[]> result = new ArrayList<>(listSize);
             for (int i = 0; i < listSize; i++) {
                 int endIndex = (i + 1) * DATA_SIZE_IN_FRAME > dataStr.length() ? dataStr.length() : (i + 1) * DATA_SIZE_IN_FRAME;
                 String dataTemp = dataStr.substring(i * DATA_SIZE_IN_FRAME, endIndex);
@@ -430,7 +430,20 @@ public class LzBleHelper {
         }
 
         private void setMeterCumuUsage(String meterCumuUsageHex, boolean myself) {
-            String m = String.valueOf(Integer.parseInt(meterCumuUsageHex, 16));
+            String m;
+            int cu = Integer.parseInt(meterCumuUsageHex, 16);
+            if (cu < 100 && cu > 9) {
+                m = "0." + cu;
+                meterCumuUsage = m;
+                return;
+            }
+
+            if (cu < 9) {
+                m = "0.0" + cu;
+                meterCumuUsage = m;
+                return;
+            }
+            m = String.valueOf(cu);
             meterCumuUsage = new StringBuilder(m).insert(m.length() - 2, ".").toString();
         }
 
