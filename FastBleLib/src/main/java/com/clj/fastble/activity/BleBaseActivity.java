@@ -223,13 +223,13 @@ public class BleBaseActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == Activity.RESULT_OK) {
-                MyToast.show(R.string.bluetooth_failed_to_open);
-            } else {
                 if (!checkGPS()) {
                     openGPS();
                 } else {
                     checkPermissions();
                 }
+            } else {
+                MyToast.show(R.string.bluetooth_failed_to_open);
             }
         } else if (requestCode == REQUEST_CODE_OPEN_GPS) {
             checkPermissions();
