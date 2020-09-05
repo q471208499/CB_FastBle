@@ -37,6 +37,7 @@
     <string name="connected">已连接</string>
     <string name="disconnect">断开连接</string>
     <string name="enter">进入操作</string>
+    <string name="bluetooth_failed_to_open">蓝牙打开失败</string>
 
     <string name="no_permission">权限不足，请重试后允许！</string>
 </resources>

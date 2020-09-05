@@ -38,6 +38,7 @@
     <string name="connected">Connected</string>
     <string name="disconnect">Disconnect</string>
     <string name="enter">Enter</string>
+    <string name="bluetooth_failed_to_open">Bluetooth failed to open</string>
 
     <string name="no_permission">No permission, try again later!</string>
 </resources>

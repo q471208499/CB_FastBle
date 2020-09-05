@@ -1,6 +1,7 @@
 package com.clj.fastble.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -221,10 +222,14 @@ public class BleBaseActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ENABLE_BT) {
-            if (!checkGPS()) {
-                openGPS();
+            if (resultCode == Activity.RESULT_OK) {
+                MyToast.show(R.string.bluetooth_failed_to_open);
             } else {
-                checkPermissions();
+                if (!checkGPS()) {
+                    openGPS();
+                } else {
+                    checkPermissions();
+                }
             }
         } else if (requestCode == REQUEST_CODE_OPEN_GPS) {
             checkPermissions();
