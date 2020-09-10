@@ -8,47 +8,89 @@ import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.clj.blesample.R;
-import com.clj.fastble.utils.BytesADUtils;
+import com.clj.blesample.dialog.AdDialog;
+import com.clj.blesample.listener.AdBtnCallback;
+import com.clj.fastble.utils.HexUtil;
 
-public class MyAdActivity extends AppCompatActivity {
-    BluetoothLeAdvertiser mBluetoothLeAdvertiser;
+import cn.cb.baselibrary.activity.BaseActivity;
+import cn.cb.baselibrary.utils.ABTimeUtils;
+import es.dmoral.toasty.MyToast;
+
+public class MyAdActivity extends BaseActivity {
+    private final String TAG = getClass().getSimpleName();
+
+    private BluetoothLeAdvertiser mBluetoothLeAdvertiser;
+    private RadioGroup radioGroup;
+    private TextView adLog;
     private static final int REQUEST_CODE_OPEN_GPS = 1;
     private static final int REQUEST_CODE_PERMISSION_LOCATION = 2;
-
-    boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ad);
-
+        initBarView();
         //checkPermissions();
+        radioGroup = findViewById(R.id.ad_radio_group);
+        adLog = findViewById(R.id.ad_log);
 
         findViewById(R.id.ad_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                if (!bluetoothAdapter.isEnabled()) {
-                    Toast.makeText(MyAdActivity.this, getString(R.string.please_open_blue), Toast.LENGTH_LONG).show();
-                    return;
-                } else {
-                    getAdvertiser();
-                }
-                if (flag) {
-                    stopAction(v);
-                } else {
-                    startAction(v);
-                }
-                flag = !flag;
+                showLoading();
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AdDialog(MyAdActivity.this, radioGroup, adBtnCallback).show();
+                        dismissLoading();
+                    }
+                });
             }
         });
     }
+
+    private AdBtnCallback adBtnCallback = new AdBtnCallback() {
+        @Override
+        public void positive(String hexStr, byte[] broadcastData) {
+            MyToast.show(hexStr);
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if (!bluetoothAdapter.isEnabled()) {
+                Toast.makeText(MyAdActivity.this, getString(R.string.please_open_blue), Toast.LENGTH_LONG).show();
+                return;
+            } else {
+                getAdvertiser();
+            }
+            startAction(broadcastData);
+            StringBuilder sb = new StringBuilder();
+            sb.append("【");
+            sb.append(ABTimeUtils.getCurrentTimeInString(ABTimeUtils.DEFAULT_DATE_FORMAT));
+            sb.append("】");
+            sb.append(HexUtil.encodeHexStr(broadcastData, false));
+            sb.append("\n");
+            sb.append(adLog.getText().toString());
+            adLog.setText(sb.toString());
+            Log.i(TAG, "positive: " + HexUtil.encodeHexStr(broadcastData, false));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    stopAction();
+                }
+            }, 3000);
+        }
+
+        @Override
+        public void negative() {
+
+        }
+    };
 
     private void getAdvertiser() {
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -56,16 +98,10 @@ public class MyAdActivity extends AppCompatActivity {
         mBluetoothLeAdvertiser = bluetoothAdapter.getBluetoothLeAdvertiser();
     }
 
-    private int times = 0;
-
-    public void startAction(View v) {
-        times++;
-        byte[] broadcastData;
-        if (times % 3 == 0) {
-            broadcastData = new BytesADUtils(null).get0x02Bytes();
-        } else {
-            broadcastData = new BytesADUtils(null).get0x01Bytes();
-        }
+    public void startAction(byte[] broadcastData) {
+        //byte[] broadcastData = new BytesADUtils(hexStr).get0x12Bytes();
+        //broadcastData = new BytesADUtils(null).get0x02Bytes();
+        //broadcastData = new BytesADUtils(null).get0x01Bytes();
         //broadcastData = new BytesADUtils("200527").get0x10Bytes();
         //System.out.println("####" + HexUtil.encodeHexStr(broadcastData));
         AdvertiseSettings settings = createAdvSettings(true, 0);
@@ -74,7 +110,7 @@ public class MyAdActivity extends AppCompatActivity {
         mBluetoothLeAdvertiser.startAdvertising(settings, advertiseData, callback);
     }
 
-    public void stopAction(View v) {
+    public void stopAction() {
         mBluetoothLeAdvertiser.stopAdvertising(mAdvertiseCallback);
         Toast.makeText(MyAdActivity.this, "关闭广播成功", Toast.LENGTH_LONG).show();
     }
@@ -91,7 +127,8 @@ public class MyAdActivity extends AppCompatActivity {
 
     public AdvertiseData createAdvertiseData(byte[] data) {
         AdvertiseData.Builder mDataBuilder = new AdvertiseData.Builder();
-        mDataBuilder.addManufacturerData(0xFFFF, data);
+        //mDataBuilder.addManufacturerData(0xFFFF, data);
+        mDataBuilder.setIncludeDeviceName(false);
         AdvertiseData mAdvertiseData = mDataBuilder.build();
         return mAdvertiseData;
     }
@@ -100,14 +137,15 @@ public class MyAdActivity extends AppCompatActivity {
         @Override
         public void onStartSuccess(AdvertiseSettings settingsInEffect) {
             super.onStartSuccess(settingsInEffect);
-
+            Log.i(TAG, "onStartSuccess: ");
             Toast.makeText(MyAdActivity.this, "发送广播成功", Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onStartFailure(int errorCode) {
             super.onStartFailure(errorCode);
-            Toast.makeText(MyAdActivity.this, "发送广播失败", Toast.LENGTH_LONG).show();
+            Log.e(TAG, "onStartFailure: 发送广播失败" + errorCode);
+            Toast.makeText(MyAdActivity.this, "发送广播失败" + errorCode, Toast.LENGTH_LONG).show();
         }
     };
 

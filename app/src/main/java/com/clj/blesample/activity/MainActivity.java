@@ -1,4 +1,4 @@
-package com.clj.blesample;
+package com.clj.blesample.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -29,11 +29,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.clj.blesample.R;
 import com.clj.blesample.adapter.DeviceAdapter;
 import com.clj.blesample.comm.ObserverManager;
 import com.clj.blesample.operation.OperationActivity;
@@ -50,8 +50,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import cn.cb.baselibrary.activity.BaseActivity;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_CODE_OPEN_GPS = 1;
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initBarView();
         initView();
 
         BleManager.getInstance().init(getApplication());

@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp">
+
+            <EditText
+                android:id="@+id/meter_address_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLines="1"
+                android:text="112233445566"
+                app:layout_constraintLeft_toRightOf="@+id/meter_address_key"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/meter_address_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="水表编号："
+                app:layout_constraintBottom_toBottomOf="@id/meter_address_value"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/meter_address_value"
+                app:layout_constraintTop_toTopOf="@+id/meter_address_value" />
+
+            <EditText
+                android:id="@+id/noReplyInterval_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:text="180"
+                app:layout_constraintLeft_toRightOf="@+id/view_0x12_time_key"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/meter_address_value" />
+
+            <TextView
+                android:id="@+id/view_0x12_time_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="不可回复广播包间隔，\n取值0-255 【180】秒："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/noReplyInterval_value"
+                app:layout_constraintTop_toTopOf="@+id/noReplyInterval_value" />
+
+            <EditText
+                android:id="@+id/ReplyCnt_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLines="1"
+                android:text="5"
+                app:layout_constraintLeft_toRightOf="@+id/ReplyCnt_key"
+                app:layout_constraintRight_toRightOf="@+id/noReplyInterval_value"
+                app:layout_constraintTop_toBottomOf="@+id/noReplyInterval_value" />
+
+            <TextView
+                android:id="@+id/ReplyCnt_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="可回复广播包间隔，\n取值0-255 【5】次："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/ReplyCnt_value"
+                app:layout_constraintTop_toTopOf="@+id/ReplyCnt_value" />
+
+            <EditText
+                android:id="@+id/SendPointNum_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLines="1"
+                android:text="20"
+                app:layout_constraintLeft_toRightOf="@+id/SendPointNum_key"
+                app:layout_constraintRight_toRightOf="@+id/ReplyCnt_value"
+                app:layout_constraintTop_toBottomOf="@+id/ReplyCnt_value" />
+
+            <TextView
+                android:id="@+id/SendPointNum_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置蓝牙上报点个数，\n取值0-255   【20】个："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/SendPointNum_value"
+                app:layout_constraintTop_toTopOf="@+id/SendPointNum_value" />
+
+            <EditText
+                android:id="@+id/StartAdvTime1_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="2"
+                android:maxLines="1"
+                android:text="6"
+                app:layout_constraintLeft_toRightOf="@+id/StartAdvTime1_key"
+                app:layout_constraintRight_toRightOf="@+id/SendPointNum_value"
+                app:layout_constraintTop_toBottomOf="@+id/SendPointNum_value" />
+
+            <TextView
+                android:id="@+id/StartAdvTime1_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开启蓝牙广播段1时间，\n取值0-23   【6】点："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/StartAdvTime1_value"
+                app:layout_constraintTop_toTopOf="@+id/StartAdvTime1_value" />
+
+            <EditText
+                android:id="@+id/StoptAdvTime1_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="2"
+                android:maxLines="1"
+                android:text="9"
+                app:layout_constraintLeft_toRightOf="@+id/StoptAdvTime1_key"
+                app:layout_constraintRight_toRightOf="@+id/StartAdvTime1_value"
+                app:layout_constraintTop_toBottomOf="@+id/StartAdvTime1_value" />
+
+            <TextView
+                android:id="@+id/StoptAdvTime1_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关闭蓝牙广播段1时间，\n取值0-23   【9】点："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/StoptAdvTime1_value"
+                app:layout_constraintTop_toTopOf="@+id/StoptAdvTime1_value" />
+
+            <EditText
+                android:id="@+id/StartAdvTime2_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="2"
+                android:maxLines="1"
+                android:text="18"
+                app:layout_constraintLeft_toRightOf="@+id/StartAdvTime2_key"
+                app:layout_constraintRight_toRightOf="@+id/StoptAdvTime1_value"
+                app:layout_constraintTop_toBottomOf="@+id/StoptAdvTime1_value" />
+
+            <TextView
+                android:id="@+id/StartAdvTime2_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开启蓝牙广播段2时间，\n取值0-23    【18】点："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/StartAdvTime2_value"
+                app:layout_constraintTop_toTopOf="@+id/StartAdvTime2_value" />
+
+            <EditText
+                android:id="@+id/StoptAdvTime2_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="2"
+                android:maxLines="1"
+                android:text="21"
+                app:layout_constraintLeft_toRightOf="@+id/StoptAdvTime2_key"
+                app:layout_constraintRight_toRightOf="@+id/StartAdvTime2_value"
+                app:layout_constraintTop_toBottomOf="@+id/StartAdvTime2_value" />
+
+            <TextView
+                android:id="@+id/StoptAdvTime2_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关闭蓝牙广播段2时间，\n取值0-23 【21】点："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/StoptAdvTime2_value"
+                app:layout_constraintTop_toTopOf="@+id/StoptAdvTime2_value" />
+
+            <EditText
+                android:id="@+id/AdvTimes_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:text="1"
+                app:layout_constraintLeft_toRightOf="@+id/AdvTimes_key"
+                app:layout_constraintRight_toRightOf="@+id/StoptAdvTime2_value"
+                app:layout_constraintTop_toBottomOf="@+id/StoptAdvTime2_value" />
+
+            <TextView
+                android:id="@+id/AdvTimes_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="每次蓝牙广播的次数\n取值1-255 【1】次："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/AdvTimes_value"
+                app:layout_constraintTop_toTopOf="@+id/AdvTimes_value" />
+
+            <EditText
+                android:id="@+id/AdvGapTimer_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:text="100"
+                app:layout_constraintLeft_toRightOf="@+id/AdvGapTimer_key"
+                app:layout_constraintRight_toRightOf="@+id/AdvTimes_value"
+                app:layout_constraintTop_toBottomOf="@+id/AdvTimes_value" />
+
+            <TextView
+                android:id="@+id/AdvGapTimer_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="蓝牙广播的间隔时间\n取值1-255 【100】ms："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/AdvGapTimer_value"
+                app:layout_constraintTop_toTopOf="@+id/AdvGapTimer_value" />
+
+            <EditText
+                android:id="@+id/ReadIntInterval_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:text="5"
+                app:layout_constraintLeft_toRightOf="@+id/ReadIntInterval_key"
+                app:layout_constraintRight_toRightOf="@+id/AdvGapTimer_value"
+                app:layout_constraintTop_toBottomOf="@+id/AdvGapTimer_value" />
+
+            <TextView
+                android:id="@+id/ReadIntInterval_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="读角位移间隔时间，单位为分钟，\n取值1-255  【5】分钟："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/ReadIntInterval_value"
+                app:layout_constraintTop_toTopOf="@+id/ReadIntInterval_value" />
+
+            <EditText
+                android:id="@+id/ReplyTimeout_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:text="2"
+                app:layout_constraintLeft_toRightOf="@+id/ReplyTimeout_key"
+                app:layout_constraintRight_toRightOf="@+id/ReadIntInterval_value"
+                app:layout_constraintTop_toBottomOf="@+id/ReadIntInterval_value" />
+
+            <TextView
+                android:id="@+id/ReplyTimeout_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="蓝牙扫描可回复包数据等待的超时时间，\n取值1-255 【2】秒："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/ReplyTimeout_value"
+                app:layout_constraintTop_toTopOf="@+id/ReplyTimeout_value" />
+
+            <EditText
+                android:id="@+id/SampleMode_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:text="0"
+                app:layout_constraintLeft_toRightOf="@+id/SampleMode_key"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ReplyTimeout_value" />
+
+            <TextView
+                android:id="@+id/SampleMode_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="蓝牙表采样模式：\n0：双模式校准采样 \n1：脉冲采样 \n2：直读采样 \n3：双模式独立采样【0】："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/SampleMode_value"
+                app:layout_constraintTop_toTopOf="@+id/SampleMode_value" />
+
+            <EditText
+                android:id="@+id/IrScanGap_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:text="100"
+                app:layout_constraintLeft_toRightOf="@+id/IrScanGap_key"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/SampleMode_key" />
+
+            <TextView
+                android:id="@+id/IrScanGap_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="红外扫描间隔时间，\n取值1-255【100】ms："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/IrScanGap_value"
+                app:layout_constraintTop_toTopOf="@+id/IrScanGap_value" />
+
+            <EditText
+                android:id="@+id/IrBaud_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:text="1"
+                app:layout_constraintLeft_toRightOf="@+id/IrBaud_key"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/IrScanGap_value" />
+
+            <TextView
+                android:id="@+id/IrBaud_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="红外波特率：0:600  1:1200   2:2400  \n3:4800  4:9600  5:19200   6:38400【1】："
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/IrBaud_value"
+                app:layout_constraintTop_toTopOf="@+id/IrBaud_value" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -54,13 +54,14 @@ public class BleScanActivity extends BleBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ble_scan);
+        initBarView();
         bindView();
     }
 
     private void bindView() {
         operatingAnim = AnimationUtils.loadAnimation(this, R.anim.rotate);
         operatingAnim.setInterpolator(new LinearInterpolator());
-        adapter = new BleLZAdapter(this, list);
+        adapter = new BleLZAdapter(this, list, listener);
         imgLoading = findViewById(R.id.img_loading);
         total = findViewById(R.id.text_total);
         filterSwitch = findViewById(R.id.ble_switch_filter);
@@ -72,6 +73,12 @@ public class BleScanActivity extends BleBaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new MyDividerItemDecoration());
     }
+
+    private View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+        }
+    };
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override

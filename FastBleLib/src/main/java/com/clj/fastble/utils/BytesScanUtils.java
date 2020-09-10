@@ -26,14 +26,14 @@ public class BytesScanUtils {
             //System.out.println("数据开始下标：" + dataStart);
             String dateByetsLengthHex = hexStr.substring(dataStart + DATA_HEADER.length(), dataStart + DATA_HEADER.length() + 2);
             //System.out.println("数据字节长度：0x" + dateByetsLengthHex);
-            int dateByetsLength = Integer.parseInt(dateByetsLengthHex, 16);
-            //System.out.println("数据字节长度：" + dateByetsLength);
-            String allADData = hexStr.substring(dataStart, dataStart + dateByetsLength * 2);
+            int dateBytesLength = Integer.parseInt(dateByetsLengthHex, 16);
+            //System.out.println("数据字节长度：" + dateBytesLength);
+            String allADData = hexStr.substring(dataStart, dataStart + dateBytesLength * 2);
             //System.out.println("广播数据：0x" + allADData);
             if (allADData.endsWith(DATA_END)) {//校验包尾
-                //String validData = allADData.substring(4 * 2, (dateByetsLength - 2) * 2);//有效数据
+                //String validData = allADData.substring(4 * 2, (dateBytesLength - 2) * 2);//有效数据
                 //System.out.println("有效数据：" + validData);
-                String toBeSum = allADData.substring(0, (dateByetsLength - 2) * 2);
+                String toBeSum = allADData.substring(0, (dateBytesLength - 2) * 2);
                 //System.out.println("待校验：0x" + toBeSum);
                 int sumDec = 0;//十进制 校验和
                 for (int i = 0; i < toBeSum.length() / 2; i++) {
@@ -42,7 +42,7 @@ public class BytesScanUtils {
                     sumDec += item;
                 }
                 //System.out.println("十进制 校验和：" + sumDec);
-                String cs = allADData.substring((dateByetsLength - 2) * 2, (dateByetsLength - 1) * 2);
+                String cs = allADData.substring((dateBytesLength - 2) * 2, (dateBytesLength - 1) * 2);
                 //System.out.println("校验匹配：0x" + cs);
                 int csInt = Integer.parseInt(cs, 16);
                 //System.out.println("校验匹配值：" + csInt);
@@ -121,7 +121,7 @@ public class BytesScanUtils {
         String dataStr = hexStr.substring(dataStart + DATA_HEADER.length() + 14, dataStart + DATA_HEADER.length() + 16);
         StringBuffer sb = new StringBuffer(dataStr);
         sb.insert(1, ".");
-        sb.append("V");
+        sb.append(" V");
         return sb.toString();
     }
 
@@ -131,6 +131,11 @@ public class BytesScanUtils {
         System.out.println("校验结果：" + utils.isValid());
         System.out.println("指令：0x" + utils.getOrder());
         System.out.println("有效数据：0x" + utils.getValidData());
+        System.out.println("表用量整数：" + utils.getInteger());
+        System.out.println("表用量小数：" + utils.getDecimal());
+        System.out.println("电压：" + utils.getV());
+
+        System.out.println(String.format("%02x", 256));
     }
 
 }

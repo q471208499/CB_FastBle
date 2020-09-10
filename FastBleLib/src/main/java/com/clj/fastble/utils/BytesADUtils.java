@@ -20,6 +20,9 @@ public class BytesADUtils {
     private final byte order0x10 = 0x10;
     private final byte order0x11 = 0x11;
     private final byte order0x12 = 0x12;
+    private final byte order0x13 = 0x13;
+    private final byte order0x14 = 0x14;
+    private final byte order0x15 = 0x15;
     private final byte order0x21 = 0x21;
     private final byte order0x22 = 0x22;
 
@@ -59,6 +62,18 @@ public class BytesADUtils {
         return getBytes(order0x12);
     }
 
+    public byte[] get0x13Bytes() {
+        return getBytes(order0x13);
+    }
+
+    public byte[] get0x14Bytes() {
+        return getBytes(order0x14);
+    }
+
+    public byte[] get0x15Bytes() {
+        return getBytes(order0x15);
+    }
+
     public byte[] get0x21Bytes() {
         return getBytes(order0x21);
     }
@@ -69,18 +84,19 @@ public class BytesADUtils {
 
     private byte[] getBytes(byte order) {
         //byte[] data = str2Bcd(str);
-        byte[] data = HexUtil.r(str);
-        byte[] result = new byte[data.length + 6 + 6];//6代表头尾等信息，6代表表地址
+        byte[] data = HexUtil.str2Bcd(mac + str);//HexUtil.r(mac + str);
+        byte[] result = new byte[data.length + 6];//6代表头尾等信息
         result[0] = 0x73;
         result[1] = 0x6A;
-        result[2] = (byte) (data.length + 6 + 6);
+        result[2] = (byte) (data.length + 6);
         result[3] = order;
-        byte[] macB = HexUtil.str2Bcd(mac);
+        //if (mac != null || !mac.isEmpty())
+        /*byte[] macB = HexUtil.str2Bcd(mac);
         for (int i = 0; i < macB.length; i++) {
             result[i + 4] = macB[i];
-        }
+        }*/
         for (int i = 0; i < data.length; i++) {
-            result[i + 10] = data[i];
+            result[i + 4] = data[i];
         }
         result[result.length - 2] = getCS2(result);
         result[result.length - 1] = end;
@@ -96,12 +112,29 @@ public class BytesADUtils {
         return (byte) sumDec;
     }
 
+    private String getMeterAddress(String meterAddress) {
+        String str = meterAddress;
+        if (str == null || str.isEmpty() || str.length() % 2 == 1) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = str.length() / 2; i > 0; i--) {
+            sb.append(str.substring(i * 2 - 2, i * 2));
+        }
+        return sb.toString();
+    }
+
     public static void main(String[] args) {
-        String s = "202005261130";
+        BytesADUtils adUtils = new BytesADUtils("665544332211b405140609151201640502006401", "");
+        byte[] hex12 = adUtils.get0x12Bytes();
+        System.out.println(HexUtil.encodeHexStr(hex12));
+
+        //System.out.println(adUtils.getMeterAddress("112233445566"));
+        /*String s = "202005261130";
         BytesADUtils utils = new BytesADUtils(s);
 
         byte[] a = utils.get0x10Bytes();
-        System.out.println(HexUtil.encodeHexStr(a));
+        System.out.println(HexUtil.encodeHexStr(a));*/
     }
 
 }

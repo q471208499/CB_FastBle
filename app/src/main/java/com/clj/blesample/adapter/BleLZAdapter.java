@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,14 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.clj.blesample.R;
 import com.clj.blesample.comm.ObserverManager;
 import com.clj.blesample.data.MyBleDevice;
-import com.clj.fastble.utils.ADHelper;
-import com.clj.fastble.utils.BytesScanUtils;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleGattCallback;
 import com.clj.fastble.callback.BleNotifyCallback;
 import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
+import com.clj.fastble.utils.ADHelper;
+import com.clj.fastble.utils.BytesScanUtils;
 import com.clj.fastble.utils.HexUtil;
 import com.clj.fastble.utils.LzBleHelper;
 
@@ -42,13 +43,15 @@ public class BleLZAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
     private List<MyBleDevice> mList;
+    private View.OnClickListener mListener;
     private final String uuid_server = "0000FF12-0000-1000-8000-00805F9B34FB";
     private final String uuid_write = "0000FF01-0000-1000-8000-00805F9B34FB";
     private final String uuid_notify = "0000FF02-0000-1000-8000-00805F9B34FB";
 
-    public BleLZAdapter(Context context, List<MyBleDevice> list) {
+    public BleLZAdapter(Context context, List<MyBleDevice> list, View.OnClickListener listener) {
         mContext = context;
         mList = list;
+        mListener = listener;
     }
 
     @NonNull
@@ -69,6 +72,8 @@ public class BleLZAdapter extends RecyclerView.Adapter {
         bleViewHolder.rssi.setText("信号强度RSSI：" + device.getRssi());
         bleViewHolder.button.setTag(position);
         bleViewHolder.button.setOnClickListener(clickListener);
+        bleViewHolder.view.setOnClickListener(mListener);
+        bleViewHolder.view.setTag(device.getMac());
     }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -147,13 +152,13 @@ public class BleLZAdapter extends RecyclerView.Adapter {
                     });
 
                     while ((System.currentTimeMillis() - enterTime) < 2000) {
-                        if(isDeviceBusy(gatt)){
+                        if (isDeviceBusy(gatt)) {
                             try {
                                 Thread.sleep(10);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                        }else {
+                        } else {
                             break;
                         }
                     }
@@ -172,13 +177,13 @@ public class BleLZAdapter extends RecyclerView.Adapter {
 
 
                     while ((System.currentTimeMillis() - enterTime) < 2000) {
-                        if(isDeviceBusy(gatt)){
+                        if (isDeviceBusy(gatt)) {
                             try {
                                 Thread.sleep(10);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                        }else {
+                        } else {
                             break;
                         }
                     }
@@ -211,10 +216,10 @@ public class BleLZAdapter extends RecyclerView.Adapter {
     };
 
 
-    private boolean isDeviceBusy(BluetoothGatt gatt){
+    private boolean isDeviceBusy(BluetoothGatt gatt) {
         boolean state = false;
         try {
-            state = (boolean)readField(gatt,"mDeviceBusy");
+            state = (boolean) readField(gatt, "mDeviceBusy");
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (NoSuchFieldException e) {
@@ -223,7 +228,7 @@ public class BleLZAdapter extends RecyclerView.Adapter {
         return state;
     }
 
-    public  Object readField(Object object, String name) throws IllegalAccessException, NoSuchFieldException {
+    public Object readField(Object object, String name) throws IllegalAccessException, NoSuchFieldException {
         Field field = object.getClass().getDeclaredField(name);
         field.setAccessible(true);
         return field.get(object);
@@ -264,7 +269,13 @@ public class BleLZAdapter extends RecyclerView.Adapter {
                 MyBleDevice newBle = new MyBleDevice(bleDevice);
                 newBle.setTimes(times);
                 mList.set(i, newBle);
-                notifyItemChanged(i);
+                final int finalI = i;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        notifyItemChanged(finalI);
+                    }
+                }, 1000);
                 return;
             }
         }
