@@ -1,4 +1,4 @@
-package com.clj.fastble.activity;
+package com.clj.fastble.fragment;
 
 import android.Manifest;
 import android.app.Activity;
@@ -30,10 +30,13 @@ import com.clj.fastble.scan.BleScanRuleConfig;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.cb.baselibrary.activity.BaseActivity;
+import cn.cb.baselibrary.fragment.BaseFragment;
 import es.dmoral.toasty.Toasty;
 
-public class BleBaseActivity extends BaseActivity {
+/**
+ * copy from BleBaseActivity.java
+ */
+public class BleBaseFragment extends BaseFragment {
 
     private final String TAG = getClass().getSimpleName();
     private static final int REQUEST_CODE_OPEN_GPS = 2001;
@@ -42,10 +45,10 @@ public class BleBaseActivity extends BaseActivity {
     protected int SCAN_TIME_OUT = 10000;//每次扫描时间
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //checkPermissions();
-        BleManager.getInstance().init(getApplication());
+        BleManager.getInstance().init(getActivity().getApplication());
         BleManager.getInstance()
                 .enableLog(false)
                 //.setReConnectCount(1, 5000)
@@ -75,14 +78,14 @@ public class BleBaseActivity extends BaseActivity {
     }
 
     private void openGPS() {
-        new AlertDialog.Builder(this)
+        new AlertDialog.Builder(getContext())
                 .setTitle(R.string.notifyTitle)
                 .setMessage(R.string.gpsNotifyMsg)
                 .setNegativeButton(R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toasty.info(BleBaseActivity.this, getString(R.string.no_permission));
+                                Toasty.info(getContext(), getString(R.string.no_permission));
                             }
                         })
                 .setPositiveButton(R.string.setting,
@@ -112,7 +115,7 @@ public class BleBaseActivity extends BaseActivity {
      * 打开蓝牙
      */
     public boolean enableBluetooth() {
-        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothManager bluetoothManager = (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
         if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -123,7 +126,7 @@ public class BleBaseActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         BleManager.getInstance().disconnectAllDevice();
         BleManager.getInstance().destroy();
@@ -141,7 +144,7 @@ public class BleBaseActivity extends BaseActivity {
                         if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                             onPermissionGranted(permissions[i]);
                         } else {
-                            Toasty.info(BleBaseActivity.this, getString(R.string.no_permission));
+                            Toasty.info(getContext(), getString(R.string.no_permission));
                         }
                     }
                 }
@@ -167,7 +170,7 @@ public class BleBaseActivity extends BaseActivity {
                 .setReportDelay(0)
                 .build();
         leScanner.startScan(null, settings, callback);
-        Toasty.info(BleBaseActivity.this, getString(R.string.start_scan));
+        Toasty.info(getContext(), getString(R.string.start_scan));
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -175,7 +178,7 @@ public class BleBaseActivity extends BaseActivity {
                 if (leScanner != null) {
                     leScanner.stopScan(callback);
                 }
-                Toasty.info(BleBaseActivity.this, getString(R.string.stop_scan));
+                Toasty.info(getContext(), getString(R.string.stop_scan));
             }
         }, SCAN_TIME_OUT);
     }
@@ -194,7 +197,7 @@ public class BleBaseActivity extends BaseActivity {
     }
 
     private boolean checkGPSIsOpen() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (locationManager == null)
             return true;
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -204,7 +207,7 @@ public class BleBaseActivity extends BaseActivity {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
         List<String> permissionDeniedList = new ArrayList<>();
         for (String permission : permissions) {
-            int permissionCheck = ContextCompat.checkSelfPermission(this, permission);
+            int permissionCheck = ContextCompat.checkSelfPermission(getContext(), permission);
             if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
                 onPermissionGranted(permission);
             } else {
@@ -213,12 +216,12 @@ public class BleBaseActivity extends BaseActivity {
         }
         if (!permissionDeniedList.isEmpty()) {
             String[] deniedPermissions = permissionDeniedList.toArray(new String[permissionDeniedList.size()]);
-            ActivityCompat.requestPermissions(this, deniedPermissions, REQUEST_CODE_PERMISSION_LOCATION);
+            ActivityCompat.requestPermissions(getActivity(), deniedPermissions, REQUEST_CODE_PERMISSION_LOCATION);
         }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == Activity.RESULT_OK) {
@@ -228,7 +231,7 @@ public class BleBaseActivity extends BaseActivity {
                     checkPermissions();
                 }
             } else {
-                Toasty.info(BleBaseActivity.this, getString(R.string.bluetooth_failed_to_open));
+                Toasty.info(getContext(), getString(R.string.bluetooth_failed_to_open));
             }
         } else if (requestCode == REQUEST_CODE_OPEN_GPS) {
             checkPermissions();

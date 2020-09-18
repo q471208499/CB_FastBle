@@ -46,19 +46,20 @@ public class ADHelper {
     }
 
     private AdvertiseSettings createAdvSettings(boolean connectable, int timeoutMillis) {
-        AdvertiseSettings.Builder mSettingsbuilder = new AdvertiseSettings.Builder();
-        //mSettingsbuilder.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
-        mSettingsbuilder.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
-        mSettingsbuilder.setConnectable(connectable);
-        mSettingsbuilder.setTimeout(timeoutMillis);
-        mSettingsbuilder.setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
-        AdvertiseSettings mAdvertiseSettings = mSettingsbuilder.build();
+        AdvertiseSettings.Builder mSettingsBuilder = new AdvertiseSettings.Builder();
+        //mSettingsBuilder.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
+        mSettingsBuilder.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
+        mSettingsBuilder.setConnectable(connectable);
+        mSettingsBuilder.setTimeout(timeoutMillis);
+        mSettingsBuilder.setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
+        AdvertiseSettings mAdvertiseSettings = mSettingsBuilder.build();
         return mAdvertiseSettings;
     }
 
     private AdvertiseData createAdvertiseData(byte[] data) {
         AdvertiseData.Builder mDataBuilder = new AdvertiseData.Builder();
         mDataBuilder.addManufacturerData(0xFFFF, data);
+        mDataBuilder.setIncludeDeviceName(false);
         AdvertiseData mAdvertiseData = mDataBuilder.build();
         return mAdvertiseData;
     }

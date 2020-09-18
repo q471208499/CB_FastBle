@@ -22,6 +22,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.BleScanConnectActivity"
+            android:theme="@style/AppThemeBase.NoActionBar" />
+        <activity
             android:name=".activity.BleScanActivity"
             android:theme="@style/AppThemeBase.NoActionBar" />
         <activity

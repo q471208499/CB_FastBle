@@ -19,12 +19,14 @@ public class AdDialog extends AlertDialog.Builder {
     private AdBtnCallback adBtnCallback;
     private Context context;
     private ViewInterface anInterface;
+    private String macAddress;
 
-    public AdDialog(@NonNull Context context, RadioGroup radioGroup, AdBtnCallback adBtnCallback) {
+    public AdDialog(@NonNull Context context, RadioGroup radioGroup, AdBtnCallback adBtnCallback, String macAddress) {
         super(context);
         this.context = context;
         this.radioGroup = radioGroup;
         this.adBtnCallback = adBtnCallback;
+        this.macAddress = macAddress;
         setView();
     }
 
@@ -38,7 +40,7 @@ public class AdDialog extends AlertDialog.Builder {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             if (which == DialogInterface.BUTTON_POSITIVE) {
-                adBtnCallback.positive(anInterface.getHexDate(), anInterface.broadcastData());
+                adBtnCallback.positive(anInterface.getHexDate(), anInterface.broadcastData(), anInterface.order());
             } else if (which == DialogInterface.BUTTON_NEGATIVE) {
                 adBtnCallback.negative();
             }
@@ -85,6 +87,7 @@ public class AdDialog extends AlertDialog.Builder {
             View view = LayoutInflater.from(context).inflate(R.layout.view_0x11, null);
             meterAddress = view.findViewById(R.id.meter_address_value);
             timeET = view.findViewById(R.id.view_0x11_time_value);
+            meterAddress.setText(macAddress);
             return view;
         }
 
@@ -99,6 +102,11 @@ public class AdDialog extends AlertDialog.Builder {
         @Override
         public byte[] broadcastData() {
             return new BytesADUtils(getHexDate(), "").get0x11Bytes();
+        }
+
+        @Override
+        public String order() {
+            return "11";
         }
     }
 
@@ -125,6 +133,7 @@ public class AdDialog extends AlertDialog.Builder {
             IrScanGap = view.findViewById(R.id.IrScanGap_value);
             IrBaud = view.findViewById(R.id.IrBaud_value);
             meterAddress = view.findViewById(R.id.meter_address_value);
+            meterAddress.setText(macAddress);
             return view;
         }
 
@@ -153,6 +162,11 @@ public class AdDialog extends AlertDialog.Builder {
         public byte[] broadcastData() {
             return new BytesADUtils(getHexDate(), "").get0x12Bytes();
         }
+
+        @Override
+        public String order() {
+            return "12";
+        }
     }
 
     private class Hex13 implements ViewInterface {
@@ -164,6 +178,7 @@ public class AdDialog extends AlertDialog.Builder {
             meterAddress = view.findViewById(R.id.meter_address_value);
             newMeterAddress = view.findViewById(R.id.view_0x13_new_meter_address_value);
             meterCountNumber = view.findViewById(R.id.view_0x13_meter_count_number_value);
+            meterAddress.setText(macAddress);
             return view;
         }
 
@@ -183,6 +198,11 @@ public class AdDialog extends AlertDialog.Builder {
         public byte[] broadcastData() {
             return new BytesADUtils(getHexDate(), "").get0x13Bytes();
         }
+
+        @Override
+        public String order() {
+            return "13";
+        }
     }
 
     private class Hex14 implements ViewInterface {
@@ -192,6 +212,7 @@ public class AdDialog extends AlertDialog.Builder {
         public View getView() {
             View view = LayoutInflater.from(context).inflate(R.layout.view_0x14, null);
             meterAddress = view.findViewById(R.id.meter_address_value);
+            meterAddress.setText(macAddress);
             return view;
         }
 
@@ -206,6 +227,11 @@ public class AdDialog extends AlertDialog.Builder {
         public byte[] broadcastData() {
             return new BytesADUtils(getHexDate(), "").get0x14Bytes();
         }
+
+        @Override
+        public String order() {
+            return "14";
+        }
     }
 
     private class Hex15 implements ViewInterface {
@@ -215,6 +241,7 @@ public class AdDialog extends AlertDialog.Builder {
         public View getView() {
             View view = LayoutInflater.from(context).inflate(R.layout.view_0x15, null);
             meterAddress = view.findViewById(R.id.meter_address_value);
+            meterAddress.setText(macAddress);
             return view;
         }
 
@@ -229,6 +256,11 @@ public class AdDialog extends AlertDialog.Builder {
         public byte[] broadcastData() {
             return new BytesADUtils(getHexDate(), "").get0x15Bytes();
         }
+
+        @Override
+        public String order() {
+            return "15";
+        }
     }
 
     interface ViewInterface {
@@ -237,5 +269,7 @@ public class AdDialog extends AlertDialog.Builder {
         String getHexDate();
 
         byte[] broadcastData();
+
+        String order();
     }
 }

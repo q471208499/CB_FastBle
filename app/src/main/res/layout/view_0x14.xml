@@ -9,7 +9,7 @@
         android:id="@+id/meter_address_value"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:inputType="number"
+        android:inputType="textVisiblePassword"
         android:maxLines="1"
         android:text="112233445566"
         app:layout_constraintLeft_toRightOf="@+id/meter_address_key"

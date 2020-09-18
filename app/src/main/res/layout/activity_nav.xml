@@ -23,11 +23,19 @@
         app:layout_constraintTop_toBottomOf="@id/nav_main" />
 
     <Button
+        android:id="@+id/nav_scan_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ble scan &amp; connect"
+        app:layout_constraintLeft_toLeftOf="@id/nav_scan"
+        app:layout_constraintTop_toBottomOf="@id/nav_scan" />
+
+    <Button
         android:id="@+id/nav_ad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ad"
-        app:layout_constraintLeft_toLeftOf="@id/nav_scan"
-        app:layout_constraintTop_toBottomOf="@id/nav_scan" />
+        app:layout_constraintLeft_toLeftOf="@id/nav_scan_connect"
+        app:layout_constraintTop_toBottomOf="@id/nav_scan_connect" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,14 @@
 package com.clj.fastble.utils;
 
 import java.math.BigInteger;
+import java.util.UUID;
 
 public class BytesScanUtils {
     public static final String ORDER_01 = "01";
     public static final String ORDER_02 = "02";
     public static final String ORDER_03 = "03";
+    public static final String ORDER_14 = "14";
+    public static final String ORDER_15 = "15";
 
     private final String DATA_HEADER = "736a";
     private final String DATA_END = "16";
@@ -24,9 +27,9 @@ public class BytesScanUtils {
         if (hexStr.contains(DATA_HEADER)) {//校验包头
             int dataStart = hexStr.indexOf(DATA_HEADER);
             //System.out.println("数据开始下标：" + dataStart);
-            String dateByetsLengthHex = hexStr.substring(dataStart + DATA_HEADER.length(), dataStart + DATA_HEADER.length() + 2);
-            //System.out.println("数据字节长度：0x" + dateByetsLengthHex);
-            int dateBytesLength = Integer.parseInt(dateByetsLengthHex, 16);
+            String dateBytesLengthHex = hexStr.substring(dataStart + DATA_HEADER.length(), dataStart + DATA_HEADER.length() + 2);
+            //System.out.println("数据字节长度：0x" + dateBytesLengthHex);
+            int dateBytesLength = Integer.parseInt(dateBytesLengthHex, 16);
             //System.out.println("数据字节长度：" + dateBytesLength);
             String allADData = hexStr.substring(dataStart, dataStart + dateBytesLength * 2);
             //System.out.println("广播数据：0x" + allADData);
@@ -57,11 +60,11 @@ public class BytesScanUtils {
     public String getOrder() {
         int dataStart = hexStr.indexOf(DATA_HEADER);
         //System.out.println("数据开始下标：" + dataStart);
-        String dateByetsLengthHex = hexStr.substring(dataStart + DATA_HEADER.length(), dataStart + DATA_HEADER.length() + 2);
-        //System.out.println("数据字节长度：0x" + dateByetsLengthHex);
-        int dateByetsLength = Integer.parseInt(dateByetsLengthHex, 16);
-        //System.out.println("数据字节长度：" + dateByetsLength);
-        String allADData = hexStr.substring(dataStart, dataStart + dateByetsLength * 2);
+        String dateBytesLengthHex = hexStr.substring(dataStart + DATA_HEADER.length(), dataStart + DATA_HEADER.length() + 2);
+        //System.out.println("数据字节长度：0x" + dateBytesLengthHex);
+        int dateBytesLength = Integer.parseInt(dateBytesLengthHex, 16);
+        //System.out.println("数据字节长度：" + dateBytesLength);
+        String allADData = hexStr.substring(dataStart, dataStart + dateBytesLength * 2);
         //System.out.println("广播数据：0x" + allADData);
         return allADData.substring(6, 8);
     }
@@ -69,15 +72,27 @@ public class BytesScanUtils {
     public String getValidData() {
         int dataStart = hexStr.indexOf(DATA_HEADER);
         //System.out.println("数据开始下标：" + dataStart);
-        String dateByetsLengthHex = hexStr.substring(dataStart + DATA_HEADER.length(), dataStart + DATA_HEADER.length() + 2);
-        //System.out.println("数据字节长度：0x" + dateByetsLengthHex);
-        int dateByetsLength = Integer.parseInt(dateByetsLengthHex, 16);
-        //System.out.println("数据字节长度：" + dateByetsLength);
-        String allADData = hexStr.substring(dataStart, dataStart + dateByetsLength * 2);
+        String dateBytesLengthHex = hexStr.substring(dataStart + DATA_HEADER.length(), dataStart + DATA_HEADER.length() + 2);
+        //System.out.println("数据字节长度：0x" + dateBytesLengthHex);
+        int dateBytesLength = Integer.parseInt(dateBytesLengthHex, 16);
+        //System.out.println("数据字节长度：" + dateBytesLength);
+        String allADData = hexStr.substring(dataStart, dataStart + dateBytesLength * 2);
         //System.out.println("广播数据：0x" + allADData);
-        String validData = allADData.substring(4 * 2, (dateByetsLength - 2) * 2);//有效数据
+        String validData = allADData.substring(4 * 2, (dateBytesLength - 2) * 2);//有效数据
         //System.out.println("有效数据：0x" + validData);
         return validData;
+    }
+
+    public String getAllData() {
+        int dataStart = hexStr.indexOf(DATA_HEADER);
+        //System.out.println("数据开始下标：" + dataStart);
+        String dateBytesLengthHex = hexStr.substring(dataStart + DATA_HEADER.length(), dataStart + DATA_HEADER.length() + 2);
+        //System.out.println("数据字节长度：0x" + dateBytesLengthHex);
+        int dateBytesLength = Integer.parseInt(dateBytesLengthHex, 16);
+        //System.out.println("数据字节长度：" + dateBytesLength);
+        String allADData = hexStr.substring(dataStart, dataStart + dateBytesLength * 2);
+        //System.out.println("广播数据：0x" + allADData);
+        return allADData;
     }
 
     public String getYSL() {
@@ -119,7 +134,7 @@ public class BytesScanUtils {
     public String getV() {
         int dataStart = hexStr.indexOf(DATA_HEADER);
         String dataStr = hexStr.substring(dataStart + DATA_HEADER.length() + 14, dataStart + DATA_HEADER.length() + 16);
-        StringBuffer sb = new StringBuffer(dataStr);
+        StringBuilder sb = new StringBuilder(dataStr);
         sb.insert(1, ".");
         sb.append(" V");
         return sb.toString();
@@ -136,6 +151,10 @@ public class BytesScanUtils {
         System.out.println("电压：" + utils.getV());
 
         System.out.println(String.format("%02x", 256));
+
+
+        System.out.println(UUID.randomUUID());
+        System.out.println(UUID.randomUUID().toString());
     }
 
 }

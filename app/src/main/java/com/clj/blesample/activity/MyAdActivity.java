@@ -1,11 +1,15 @@
 package com.clj.blesample.activity;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,20 +22,26 @@ import android.widget.Toast;
 import com.clj.blesample.R;
 import com.clj.blesample.dialog.AdDialog;
 import com.clj.blesample.listener.AdBtnCallback;
+import com.clj.fastble.activity.BleBaseActivity;
+import com.clj.fastble.data.BleDevice;
+import com.clj.fastble.utils.BytesScanUtils;
 import com.clj.fastble.utils.HexUtil;
 
-import cn.cb.baselibrary.activity.BaseActivity;
-import cn.cb.baselibrary.utils.ABTimeUtils;
-import es.dmoral.toasty.MyToast;
+import java.util.List;
 
-public class MyAdActivity extends BaseActivity {
+import cn.cb.baselibrary.utils.ABTimeUtils;
+import es.dmoral.toasty.Toasty;
+
+public class MyAdActivity extends BleBaseActivity {
     private final String TAG = getClass().getSimpleName();
 
     private BluetoothLeAdvertiser mBluetoothLeAdvertiser;
     private RadioGroup radioGroup;
-    private TextView adLog;
+    private TextView adLog, adMac;
     private static final int REQUEST_CODE_OPEN_GPS = 1;
     private static final int REQUEST_CODE_PERMISSION_LOCATION = 2;
+    private String order;
+    private final String order_search = "search";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,28 +49,107 @@ public class MyAdActivity extends BaseActivity {
         setContentView(R.layout.activity_ad);
         initBarView();
         //checkPermissions();
+
+        setScanCallback();
+        bindView();
+    }
+
+    private void bindView() {
         radioGroup = findViewById(R.id.ad_radio_group);
         adLog = findViewById(R.id.ad_log);
+        adMac = findViewById(R.id.ad_mac);
+        findViewById(R.id.ad_btn).setOnClickListener(clickListener);
+        findViewById(R.id.ad_search).setOnClickListener(clickListener);
+    }
 
-        findViewById(R.id.ad_btn).setOnClickListener(new View.OnClickListener() {
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.ad_btn:
+                    showLoading();
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            boolean gone = adMac.getVisibility() == View.GONE;
+                            String macAddress = gone ? "112233445566" : adMac.getText().toString().replaceAll(":", "");
+                            new AdDialog(MyAdActivity.this, radioGroup, adBtnCallback, macAddress).show();
+                            dismissLoading();
+                        }
+                    });
+                    break;
+                case R.id.ad_search:
+                    order = order_search;
+                    showLoading(SCAN_TIME_OUT / 1000);
+                    goScan();
+                    break;
+            }
+        }
+    };
+
+    private void setScanCallback() {
+        callback = new ScanCallback() {
             @Override
-            public void onClick(View v) {
-                showLoading();
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        new AdDialog(MyAdActivity.this, radioGroup, adBtnCallback).show();
+            public void onScanResult(int callbackType, ScanResult result) {
+                super.onScanResult(callbackType, result);
+                BluetoothDevice device = result.getDevice();
+                Log.i(TAG, "onScanResult: " + device.getAddress());
+                BleDevice bleDevice = new BleDevice(device, result.getRssi(), result.getScanRecord().getBytes(), System.currentTimeMillis());
+                BytesScanUtils scanUtils = new BytesScanUtils(bleDevice.getScanRecord());
+                if (!scanUtils.isValid()) {
+                    return;
+                }
+                //scanUtils.getOrder();
+                if (order.equals(order_search)) {
+                    int rssi = result.getRssi();
+                    if (rssi > -50) {
+                        String address = device.getAddress();
+                        adMac.setText(address);
+                        adMac.setVisibility(View.VISIBLE);
                         dismissLoading();
                     }
-                });
+                } else if (order.equals(BytesScanUtils.ORDER_14) || order.equals(BytesScanUtils.ORDER_15)) {
+                    dismissLoading();
+                    addLog(scanUtils.getAllData());
+                }
             }
-        });
+
+            @Override
+            public void onBatchScanResults(List<ScanResult> results) {
+                super.onBatchScanResults(results);
+            }
+
+            @Override
+            public void onScanFailed(int errorCode) {
+                super.onScanFailed(errorCode);
+            }
+        };
+    }
+
+    @Override
+    protected void startScanBLE() {
+        leScanner = bluetoothAdapter.getBluetoothLeScanner();
+        ScanSettings settings = new ScanSettings.Builder()
+                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                .setReportDelay(0)
+                .build();
+        leScanner.startScan(null, settings, callback);
+        Toasty.info(this, getString(com.clj.fastble.R.string.start_scan));
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (leScanner != null) {
+                    leScanner.stopScan(callback);
+                }
+                Toasty.info(MyAdActivity.this, getString(com.clj.fastble.R.string.stop_scan));
+            }
+        }, SCAN_TIME_OUT);
     }
 
     private AdBtnCallback adBtnCallback = new AdBtnCallback() {
         @Override
-        public void positive(String hexStr, byte[] broadcastData) {
-            MyToast.show(hexStr);
+        public void positive(String hexStr, byte[] broadcastData, String o) {
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if (!bluetoothAdapter.isEnabled()) {
                 Toast.makeText(MyAdActivity.this, getString(R.string.please_open_blue), Toast.LENGTH_LONG).show();
@@ -69,15 +158,9 @@ public class MyAdActivity extends BaseActivity {
                 getAdvertiser();
             }
             startAction(broadcastData);
-            StringBuilder sb = new StringBuilder();
-            sb.append("【");
-            sb.append(ABTimeUtils.getCurrentTimeInString(ABTimeUtils.DEFAULT_DATE_FORMAT));
-            sb.append("】");
-            sb.append(HexUtil.encodeHexStr(broadcastData, false));
-            sb.append("\n");
-            sb.append(adLog.getText().toString());
-            adLog.setText(sb.toString());
+            addLog(HexUtil.encodeHexStr(broadcastData, false));
             Log.i(TAG, "positive: " + HexUtil.encodeHexStr(broadcastData, false));
+            order = o;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -91,6 +174,17 @@ public class MyAdActivity extends BaseActivity {
 
         }
     };
+
+    private void addLog(String data) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("【");
+        sb.append(ABTimeUtils.getCurrentTimeInString(ABTimeUtils.DEFAULT_DATE_FORMAT));
+        sb.append("】");
+        sb.append(data);
+        sb.append("\n");
+        sb.append(adLog.getText().toString());
+        adLog.setText(sb.toString());
+    }
 
     private void getAdvertiser() {
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -126,11 +220,23 @@ public class MyAdActivity extends BaseActivity {
     }
 
     public AdvertiseData createAdvertiseData(byte[] data) {
+        if (data.length > 26) {
+            throw new ArrayIndexOutOfBoundsException("Android 广播长度最大 24");
+        }
         AdvertiseData.Builder mDataBuilder = new AdvertiseData.Builder();
-        //mDataBuilder.addManufacturerData(0xFFFF, data);
-        mDataBuilder.setIncludeDeviceName(false);
-        AdvertiseData mAdvertiseData = mDataBuilder.build();
-        return mAdvertiseData;
+        byte[] d = new byte[data.length - 2];
+        for (int i = 0; i < d.length; i++) {
+            d[i] = data[i + 2];
+        }
+        mDataBuilder.addManufacturerData(0x6A73, d);
+        //Log.i(TAG, "createAdvertiseData: " + HexUtil.formatHexString(data, true));
+        //mDataBuilder.addServiceData(ParcelUuid.fromString(String.valueOf(UUID.randomUUID())), data);
+        //String uuid = UUID.randomUUID().toString();
+        //Log.i(TAG, "createAdvertiseData: " + uuid);
+        //mDataBuilder.addServiceUuid(ParcelUuid.fromString(uuid));
+        //mDataBuilder.setIncludeDeviceName(true);
+        //mDataBuilder.setIncludeTxPowerLevel(true);
+        return mDataBuilder.build();
     }
 
     private AdvertiseCallback mAdvertiseCallback = new AdvertiseCallback() {
@@ -139,11 +245,16 @@ public class MyAdActivity extends BaseActivity {
             super.onStartSuccess(settingsInEffect);
             Log.i(TAG, "onStartSuccess: ");
             Toast.makeText(MyAdActivity.this, "发送广播成功", Toast.LENGTH_LONG).show();
+            if (BytesScanUtils.ORDER_14.equals(order) || BytesScanUtils.ORDER_15.equals(order)) {
+                goScan();
+                showLoading(SCAN_TIME_OUT / 1000);
+            }
         }
 
         @Override
         public void onStartFailure(int errorCode) {
             super.onStartFailure(errorCode);
+            dismissLoading();
             Log.e(TAG, "onStartFailure: 发送广播失败" + errorCode);
             Toast.makeText(MyAdActivity.this, "发送广播失败" + errorCode, Toast.LENGTH_LONG).show();
         }

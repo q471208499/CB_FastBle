@@ -8,14 +8,36 @@
 
     <include layout="@layout/tool_bar" />
 
+    <TextView
+        android:textStyle="bold"
+        android:id="@+id/ad_mac"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text=""
+        android:textSize="22sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar_view" />
+
+    <Button
+        android:id="@+id/ad_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="搜索信号 > -50 设备"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/ad_btn"
+        app:layout_constraintTop_toBottomOf="@+id/ad_mac" />
+
     <Button
         android:id="@+id/ad_btn"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="发送广播"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tool_bar_view" />
+        app:layout_constraintLeft_toRightOf="@id/ad_search"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ad_mac" />
 
     <RadioGroup
         android:id="@+id/ad_radio_group"
