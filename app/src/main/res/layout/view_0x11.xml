@@ -33,7 +33,7 @@
         android:clickable="false"
         android:inputType="number"
         android:maxLines="1"
-        android:text="202009101205"
+        android:text="20200910120559"
         app:layout_constraintLeft_toRightOf="@+id/view_0x11_time_key"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/meter_address_value" />

@@ -34,7 +34,7 @@ public class ADHelper {
 
     public void startAction(byte[] data) {
         Log.i(TAG, "###startAction: " + HexUtil.encodeHexStr(data));
-        AdvertiseSettings settings = createAdvSettings(true, 3 * 1000);
+        AdvertiseSettings settings = createAdvSettings();
         AdvertiseData advertiseData = createAdvertiseData(data);
         AdvertiseCallback callback = mAdvertiseCallback;
         mBluetoothLeAdvertiser.startAdvertising(settings, advertiseData, callback);
@@ -45,23 +45,26 @@ public class ADHelper {
         //Toast.makeText(MyAdActivity.this, "关闭广播成功", Toast.LENGTH_LONG).show();
     }
 
-    private AdvertiseSettings createAdvSettings(boolean connectable, int timeoutMillis) {
+    private AdvertiseSettings createAdvSettings() {
         AdvertiseSettings.Builder mSettingsBuilder = new AdvertiseSettings.Builder();
         //mSettingsBuilder.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
         mSettingsBuilder.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
-        mSettingsBuilder.setConnectable(connectable);
-        mSettingsBuilder.setTimeout(timeoutMillis);
+        mSettingsBuilder.setConnectable(true);
+        mSettingsBuilder.setTimeout(3000);
         mSettingsBuilder.setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
-        AdvertiseSettings mAdvertiseSettings = mSettingsBuilder.build();
-        return mAdvertiseSettings;
+        return mSettingsBuilder.build();
     }
 
     private AdvertiseData createAdvertiseData(byte[] data) {
+        if (data.length > 26) {
+            throw new ArrayIndexOutOfBoundsException("Android 广播长度最大 24");
+        }
+        byte[] d = new byte[data.length - 2];
+        System.arraycopy(data, 2, d, 0, d.length);
         AdvertiseData.Builder mDataBuilder = new AdvertiseData.Builder();
-        mDataBuilder.addManufacturerData(0xFFFF, data);
-        mDataBuilder.setIncludeDeviceName(false);
-        AdvertiseData mAdvertiseData = mDataBuilder.build();
-        return mAdvertiseData;
+        mDataBuilder.addManufacturerData(0x6A73, d);
+        //mDataBuilder.setIncludeDeviceName(false);
+        return mDataBuilder.build();
     }
 
     private AdvertiseCallback mAdvertiseCallback = new AdvertiseCallback() {

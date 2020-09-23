@@ -136,7 +136,7 @@ public class BytesScanUtils {
         String dataStr = hexStr.substring(dataStart + DATA_HEADER.length() + 14, dataStart + DATA_HEADER.length() + 16);
         StringBuilder sb = new StringBuilder(dataStr);
         sb.insert(1, ".");
-        sb.append(" V");
+        //sb.append(" V");
         return sb.toString();
     }
 
