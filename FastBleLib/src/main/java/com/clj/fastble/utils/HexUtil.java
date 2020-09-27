@@ -320,4 +320,15 @@ public class HexUtil {
             }
         return result;
     }
+
+    public static String bigEndian(String str) {
+        if (str == null || str.isEmpty() || str.length() % 2 == 1) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = str.length() / 2; i > 0; i--) {
+            sb.append(str.substring(i * 2 - 2, i * 2));
+        }
+        return sb.toString();
+    }
 }

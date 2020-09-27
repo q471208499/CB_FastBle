@@ -1,8 +1,5 @@
 package com.clj.fastble.utils;
 
-import java.math.BigInteger;
-import java.util.UUID;
-
 public class BytesScanUtils {
     public static final String ORDER_01 = "01";
     public static final String ORDER_02 = "02";
@@ -96,11 +93,8 @@ public class BytesScanUtils {
     }
 
     public String getYSL() {
-        //return getInteger() + "." + getDecimal();
-        BigInteger bigintI = new BigInteger(getInteger(), 16);
-        int i = bigintI.intValue();
-        BigInteger bigintD = new BigInteger(getDecimal(), 16);
-        int d = bigintD.intValue() / 100;
+        int i = Integer.valueOf(getInteger());
+        int d = Integer.valueOf(getDecimal());
         return i + "." + d;
     }
 
@@ -112,7 +106,8 @@ public class BytesScanUtils {
     public String getInteger() {
         int dataStart = hexStr.indexOf(DATA_HEADER);
         String dataStr = hexStr.substring(dataStart + DATA_HEADER.length() + 4, dataStart + DATA_HEADER.length() + 10);
-        return HexUtil.formatHexString(HexUtil.r(dataStr));
+        return HexUtil.bigEndian(dataStr);
+        //return HexUtil.formatHexString(HexUtil.r(dataStr));
     }
 
     /**
@@ -123,7 +118,8 @@ public class BytesScanUtils {
     public String getDecimal() {
         int dataStart = hexStr.indexOf(DATA_HEADER);
         String dataStr = hexStr.substring(dataStart + DATA_HEADER.length() + 10, dataStart + DATA_HEADER.length() + 14);
-        return HexUtil.formatHexString(HexUtil.r(dataStr));
+        return HexUtil.bigEndian(dataStr);
+        //return HexUtil.formatHexString(HexUtil.r(dataStr));
     }
 
     /**
@@ -141,20 +137,21 @@ public class BytesScanUtils {
     }
 
     public static void main(String[] args) {
-        String a = "0000736a0d01563412890736024f1688888888";
+        String a = "0d736a0d0207000096093400c6160000";
         BytesScanUtils utils = new BytesScanUtils(a);
         System.out.println("校验结果：" + utils.isValid());
         System.out.println("指令：0x" + utils.getOrder());
         System.out.println("有效数据：0x" + utils.getValidData());
         System.out.println("表用量整数：" + utils.getInteger());
         System.out.println("表用量小数：" + utils.getDecimal());
+        System.out.println("表用量完整：" + utils.getYSL());
         System.out.println("电压：" + utils.getV());
 
         System.out.println(String.format("%02x", 256));
 
 
-        System.out.println(UUID.randomUUID());
-        System.out.println(UUID.randomUUID().toString());
+        //System.out.println(UUID.randomUUID());
+        //System.out.println(UUID.randomUUID().toString());
     }
 
 }
