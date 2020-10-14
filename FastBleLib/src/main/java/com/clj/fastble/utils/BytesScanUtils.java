@@ -94,8 +94,8 @@ public class BytesScanUtils {
 
     public String getYSL() {
         int i = Integer.valueOf(getInteger());
-        int d = Integer.valueOf(getDecimal());
-        return i + "." + d;
+        //int d = Integer.valueOf(getDecimal());
+        return i + "." + getDecimal();
     }
 
     /**
