@@ -118,7 +118,8 @@ public class BytesScanUtils {
     public String getDecimal() {
         int dataStart = hexStr.indexOf(DATA_HEADER);
         String dataStr = hexStr.substring(dataStart + DATA_HEADER.length() + 10, dataStart + DATA_HEADER.length() + 14);
-        return HexUtil.bigEndian(dataStr);
+        return String.format("%03d", Integer.parseInt(HexUtil.bigEndian(dataStr)) % 1000);
+        //return HexUtil.bigEndian(dataStr);
         //return HexUtil.formatHexString(HexUtil.r(dataStr));
     }
 
@@ -137,7 +138,7 @@ public class BytesScanUtils {
     }
 
     public static void main(String[] args) {
-        String a = "0d736a0d0207000096093400c6160000";
+        String a = "0d736a0d0299990997093000f71600";
         BytesScanUtils utils = new BytesScanUtils(a);
         System.out.println("校验结果：" + utils.isValid());
         System.out.println("指令：0x" + utils.getOrder());
