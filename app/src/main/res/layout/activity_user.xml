@@ -29,13 +29,5 @@
         android:text="作者微信："
         android:textSize="15sp" />
 
-    <ImageView
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="10dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_wx" />
-
 </LinearLayout>
 
