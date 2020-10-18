@@ -93,9 +93,13 @@ public class BytesScanUtils {
     }
 
     public String getYSL() {
-        int i = Integer.valueOf(getInteger());
-        //int d = Integer.valueOf(getDecimal());
-        return i + "." + getDecimal();
+        try {
+            int i = Integer.valueOf(getInteger());
+            return i + "." + getDecimal();
+        } catch (Exception e) {
+            return getInteger() + "." + getDecimal();
+        }
+
     }
 
     /**
@@ -107,7 +111,6 @@ public class BytesScanUtils {
         int dataStart = hexStr.indexOf(DATA_HEADER);
         String dataStr = hexStr.substring(dataStart + DATA_HEADER.length() + 4, dataStart + DATA_HEADER.length() + 10);
         return HexUtil.bigEndian(dataStr);
-        //return HexUtil.formatHexString(HexUtil.r(dataStr));
     }
 
     /**
@@ -118,9 +121,12 @@ public class BytesScanUtils {
     public String getDecimal() {
         int dataStart = hexStr.indexOf(DATA_HEADER);
         String dataStr = hexStr.substring(dataStart + DATA_HEADER.length() + 10, dataStart + DATA_HEADER.length() + 14);
-        return String.format("%03d", Integer.parseInt(HexUtil.bigEndian(dataStr)) % 1000);
-        //return HexUtil.bigEndian(dataStr);
-        //return HexUtil.formatHexString(HexUtil.r(dataStr));
+        try {
+            return String.format("%03d", Integer.parseInt(HexUtil.bigEndian(dataStr)) % 1000);
+        } catch (Exception e) {
+            return HexUtil.bigEndian(dataStr);
+        }
+
     }
 
     /**
