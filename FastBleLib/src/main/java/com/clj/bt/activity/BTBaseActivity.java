@@ -149,7 +149,7 @@ public abstract class BTBaseActivity extends BaseActivity {
             clearConnectedThread();
         } else {
             //Toast.makeText(this, "当前设备未连接", Toast.LENGTH_SHORT).show();
-            MyToast.show("当前设备未连接");
+            //MyToast.show("当前设备未连接");
         }
     }
 

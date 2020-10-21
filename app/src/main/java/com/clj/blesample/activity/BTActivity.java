@@ -84,16 +84,6 @@ public class BTActivity extends BTBaseActivity {
         setOutline(readingView);
     }
 
-    private void setOutline(View view) {
-        view.setOutlineProvider(new ViewOutlineProvider() {
-            @Override
-            public void getOutline(View view, Outline outline) {
-                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), 20);
-            }
-        });
-        view.setClipToOutline(true);
-    }
-
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
