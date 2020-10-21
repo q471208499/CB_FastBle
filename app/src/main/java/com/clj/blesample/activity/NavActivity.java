@@ -20,6 +20,7 @@ public class NavActivity extends BaseActivity {
         findViewById(R.id.nav_scan).setOnClickListener(listener);
         findViewById(R.id.nav_scan_connect).setOnClickListener(listener);
         findViewById(R.id.nav_ad).setOnClickListener(listener);
+        findViewById(R.id.nav_bt).setOnClickListener(listener);
     }
 
     private View.OnClickListener listener = new View.OnClickListener() {
@@ -39,6 +40,9 @@ public class NavActivity extends BaseActivity {
             } else if (v.getId() == R.id.nav_scan_connect) {
                 cls = BleScanConnectActivity.class;
                 title = "scan & connect";
+            } else if (v.getId() == R.id.nav_bt) {
+                cls = BTActivity.class;
+                title = "经典蓝牙";
             }
             Intent intent = new Intent(NavActivity.this, cls);
             intent.putExtra(Intent.EXTRA_TITLE, title);

@@ -7,10 +7,10 @@ public class BytesScanUtils {
     public static final String ORDER_14 = "14";
     public static final String ORDER_15 = "15";
 
-    private final String DATA_HEADER = "736a";
-    private final String DATA_END = "16";
+    protected final String DATA_HEADER = "736a";
+    protected final String DATA_END = "16";
 
-    private String hexStr;
+    protected String hexStr;
 
     public BytesScanUtils(String hexStr) {
         this.hexStr = hexStr;
@@ -110,7 +110,7 @@ public class BytesScanUtils {
     public String getInteger() {
         int dataStart = hexStr.indexOf(DATA_HEADER);
         String dataStr = hexStr.substring(dataStart + DATA_HEADER.length() + 4, dataStart + DATA_HEADER.length() + 10);
-        return HexUtil.bigEndian(dataStr);
+        return HexUtil.bigOrSmallEndian(dataStr);
     }
 
     /**
@@ -122,9 +122,9 @@ public class BytesScanUtils {
         int dataStart = hexStr.indexOf(DATA_HEADER);
         String dataStr = hexStr.substring(dataStart + DATA_HEADER.length() + 10, dataStart + DATA_HEADER.length() + 14);
         try {
-            return String.format("%03d", Integer.parseInt(HexUtil.bigEndian(dataStr)) % 1000);
+            return String.format("%03d", Integer.parseInt(HexUtil.bigOrSmallEndian(dataStr)) % 1000);
         } catch (Exception e) {
-            return HexUtil.bigEndian(dataStr);
+            return HexUtil.bigOrSmallEndian(dataStr);
         }
 
     }

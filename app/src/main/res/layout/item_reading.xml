@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/item_reading_meter_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="表号：00112233445566"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/item_reading_flow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="用量：001122"
+        app:layout_constraintLeft_toLeftOf="@id/item_reading_meter_address"
+        app:layout_constraintRight_toLeftOf="@id/item_reading_status"
+        app:layout_constraintTop_toBottomOf="@id/item_reading_meter_address" />
+
+    <TextView
+        android:id="@+id/item_reading_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="状态：成功"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@id/item_reading_flow"
+        app:layout_constraintLeft_toRightOf="@id/item_reading_flow"
+        app:layout_constraintRight_toRightOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,4 +38,12 @@
         app:layout_constraintLeft_toLeftOf="@id/nav_scan_connect"
         app:layout_constraintTop_toBottomOf="@id/nav_scan_connect" />
 
+    <Button
+        android:id="@+id/nav_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="经典蓝牙"
+        app:layout_constraintLeft_toLeftOf="@id/nav_ad"
+        app:layout_constraintTop_toBottomOf="@id/nav_ad" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

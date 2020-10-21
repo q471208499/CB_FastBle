@@ -321,7 +321,7 @@ public class HexUtil {
         return result;
     }
 
-    public static String bigEndian(String str) {
+    public static String bigOrSmallEndian(String str) {
         if (str == null || str.isEmpty() || str.length() % 2 == 1) {
             return "";
         }
@@ -330,5 +330,20 @@ public class HexUtil {
             sb.append(str.substring(i * 2 - 2, i * 2));
         }
         return sb.toString();
+    }
+
+    public static String fixStrAdd0ForLength(String string, int length) {
+        if (string == null || string.isEmpty() || string.length() >= length) {
+            return string;
+        }
+        StringBuilder sb = new StringBuilder(string);
+        while (sb.length() < length) {
+            sb.append("0");
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(fixStrAdd0ForLength("3434", 8));
     }
 }
