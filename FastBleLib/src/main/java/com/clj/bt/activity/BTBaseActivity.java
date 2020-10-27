@@ -518,12 +518,13 @@ public abstract class BTBaseActivity extends BaseActivity {
                 case START_DISCOVERY:
                     Log.d(TAG, "开始搜索设备...");
                     //showLoading(true, 30);
-                    MyToast.show("开始搜索设备");
+                    //MyToast.show("开始搜索设备");
+                    showLoading();
                     break;
 
                 case STOP_DISCOVERY:
-                    //dismissLoading();
-                    MyToast.show("停止搜索");
+                    dismissLoading();
+                    //MyToast.show("停止搜索");
                     Log.d(TAG, "停止搜索设备...");
                     break;
 
