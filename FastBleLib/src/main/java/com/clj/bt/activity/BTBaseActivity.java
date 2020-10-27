@@ -517,7 +517,8 @@ public abstract class BTBaseActivity extends BaseActivity {
             switch (msg.what) {
                 case START_DISCOVERY:
                     Log.d(TAG, "开始搜索设备...");
-                    showLoading(true, 30);
+                    //showLoading(true, 30);
+                    MyToast.show("开始搜索设备");
                     break;
 
                 case STOP_DISCOVERY:
