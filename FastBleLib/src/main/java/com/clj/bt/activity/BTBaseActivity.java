@@ -20,6 +20,7 @@ import com.clj.bt.ConnectedThread;
 import com.clj.bt.utils.ClsUtils;
 
 import cn.cb.baselibrary.activity.BaseActivity;
+import cn.cb.baselibrary.utils.SPUtils;
 import es.dmoral.toasty.MyToast;
 
 public abstract class BTBaseActivity extends BaseActivity {
@@ -54,6 +55,8 @@ public abstract class BTBaseActivity extends BaseActivity {
     private ConnectThread connectThread;
     //管理连接的线程
     private ConnectedThread connectedThread;
+
+    private final String CONNECT_MAC = "ConnectMac";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -532,6 +535,12 @@ public abstract class BTBaseActivity extends BaseActivity {
                     BluetoothDevice bluetoothDevice = (BluetoothDevice) msg.obj;
                     //lvDevicesAdapter.addDevice(bluetoothDevice);
                     addDev(bluetoothDevice);
+                    if (compareLastMac(bluetoothDevice)) {
+                        dismissLoading();
+                        setCurBTDevice(bluetoothDevice);
+                        connectBT();
+                        showLoading("正在配对...");
+                    }
                     break;
 
                 case CONNECT_FAILURE: //连接失败
@@ -547,6 +556,7 @@ public abstract class BTBaseActivity extends BaseActivity {
                     //tvCurConState.setText("连接成功");
                     curConnState = true;
                     dismissLoading();
+                    saveConnectMac();
                     //llDataSendReceive.setVisibility(View.VISIBLE);
                     //llDeviceList.setVisibility(View.GONE);
                     break;
@@ -591,6 +601,28 @@ public abstract class BTBaseActivity extends BaseActivity {
             }
         }
     };
+
+    /**
+     * 保存最后一次连接的mac地址
+     */
+    private void saveConnectMac() {
+        String address = curBluetoothDevice.getAddress();
+        SPUtils.getInstance().put(CONNECT_MAC, address);
+    }
+
+    /**
+     * 扫描到的设备和最后一次连接设备对比，假如一致自动连接。
+     *
+     * @param bluetoothDevice
+     * @return
+     */
+    private boolean compareLastMac(BluetoothDevice bluetoothDevice) {
+        String lastMac = SPUtils.getInstance().getString(CONNECT_MAC);
+        if (lastMac == null || lastMac.isEmpty()) {
+            return false;
+        }
+        return bluetoothDevice.getAddress().equals(lastMac);
+    }
 
     /**
      * 蓝牙广播接收器
