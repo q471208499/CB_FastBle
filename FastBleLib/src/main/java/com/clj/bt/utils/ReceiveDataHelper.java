@@ -83,7 +83,8 @@ public class ReceiveDataHelper {
     public static void main(String[] args) {
         //ReceiveDataHelper helper = new ReceiveDataHelper("68AA010005080081161F9000007698002C999999992C9999999999999900005F16");
         //ReceiveDataHelper helper = new ReceiveDataHelper("68AA0100000508000083030A81003116");
-        ReceiveDataHelper helper = new ReceiveDataHelper("68 10 92 01 00 10 00 00 00 81 16 90 1F 01 00 22 22 00 2C 00 00 00 00 2C 00 00 00 00 00 00 00 00 00 FE 16 ");
+        //ReceiveDataHelper helper = new ReceiveDataHelper("68 10 92 01 00 10 00 00 00 81 16 90 1F 01 00 22 22 00 2C 00 00 00 00 2C 00 00 00 00 00 00 00 00 00 FE 16 ");
+        ReceiveDataHelper helper = new ReceiveDataHelper("68 10 01 00 23 09 18 20 00 81 16 90 1F 01 60 00 00 00 2C 60 00 00 00 2C 60 20 20 00 00 00 00 00 00 DC 16");
         System.out.println(helper.isValidForCommon());
         System.out.println(helper.isValidForCJ188());
         if (helper.isValidForCJ188()) {

@@ -26,49 +26,64 @@ public class SendDataHelper {
         }
     }
 
-    //68 10 AA AA AA AA AA AA AA 01 03 90 1F 01 D2 16
+    /**
+     * 前面三个字节：FE FE FE 必须填写，188协议必须
+     * 完整数据例子：FE FE FE 68 10 AA AA AA AA AA AA AA 01 03 90 1F 01 D2 16
+     * @return
+     */
     public byte[] getData() {
-        byte[] bytes = new byte[16];
-        bytes[0] = 0x68;
-        bytes[1] = 0x10;
+        byte[] bytes = new byte[19];
+        bytes[0] = (byte) 0xFE;
+        bytes[1] = (byte) 0xFE;
+        bytes[2] = (byte) 0xFE;
+        bytes[3] = 0x68;
+        bytes[4] = 0x10;
         for (int i = 0; i < (meterAddress.length() / 2); i++) {
-            bytes[2 + i] = HexUtil.str2Bcd(meterAddress.substring(i * 2, (i + 1) * 2))[0];
+            bytes[5 + i] = HexUtil.str2Bcd(meterAddress.substring(i * 2, (i + 1) * 2))[0];
         }
-        bytes[9] = 0x01;
-        bytes[10] = 0x03;
-        bytes[11] = (byte) 0x90;
-        bytes[12] = 0x1F;
-        bytes[13] = 0x01;
-        bytes[14] = getCS(bytes);
-        bytes[15] = 0x16;
+        bytes[12] = 0x01;
+        bytes[13] = 0x03;
+        bytes[14] = (byte) 0x90;
+        bytes[15] = 0x1F;
+        bytes[16] = 0x01;
+        bytes[17] = getCS(bytes);
+        bytes[18] = 0x16;
         return bytes;
     }
 
-    //68 10 AA AA AA AA AA AA AA 01 03 90 1F 01 D2 16
+    //FE FE FE 68 10 AA AA AA AA AA AA AA 01 03 90 1F 01 D2 16
     public static byte[] testMeterAddress() {
         byte[] bytes = new byte[16];
-        bytes[0] = 0x68;
-        bytes[1] = (byte) 0x10;
-        bytes[2] = (byte) 0xAA;
-        bytes[3] = (byte) 0xAA;
-        bytes[4] = (byte) 0xAA;
+        bytes[0] = (byte) 0xFE;
+        bytes[1] = (byte) 0xFE;
+        bytes[2] = (byte) 0xFE;
+        bytes[3] = 0x68;
+        bytes[4] = (byte) 0x10;
         bytes[5] = (byte) 0xAA;
         bytes[6] = (byte) 0xAA;
         bytes[7] = (byte) 0xAA;
         bytes[8] = (byte) 0xAA;
-        bytes[9] = (byte) 0x01;
-        bytes[10] = (byte) 0x03;
-        bytes[11] = (byte) 0x90;
-        bytes[12] = (byte) 0x1F;
-        bytes[13] = (byte) 0x01;
-        bytes[14] = (byte) 0xD2;
-        bytes[15] = (byte) 0x16;
+        bytes[9] = (byte) 0xAA;
+        bytes[10] = (byte) 0xAA;
+        bytes[11] = (byte) 0xAA;
+        bytes[12] = (byte) 0x01;
+        bytes[13] = (byte) 0x03;
+        bytes[14] = (byte) 0x90;
+        bytes[15] = (byte) 0x1F;
+        bytes[16] = (byte) 0x01;
+        bytes[17] = (byte) 0xD2;
+        bytes[18] = (byte) 0x16;
         return bytes;
     }
 
+    /**
+     * 默认FE 不纳入校验计算，所以开始i = 3
+     * @param bytes
+     * @return
+     */
     private byte getCS(byte[] bytes) {
         int toBeSum = 0;
-        for (int i = 0; i < bytes.length - 1; i++) {
+        for (int i = 3; i < bytes.length - 1; i++) {
             toBeSum += bytes[i];
         }
         int sumDec = toBeSum % 256;

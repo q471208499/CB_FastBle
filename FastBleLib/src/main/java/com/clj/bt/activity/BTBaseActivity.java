@@ -70,7 +70,7 @@ public abstract class BTBaseActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        disconnectBT();
+        //disconnectBT(); 退出activity 不断开蓝牙
         //注销广播接收
         unregisterReceiver(btBroadcastReceiver);
     }
@@ -141,6 +141,7 @@ public abstract class BTBaseActivity extends BaseActivity {
         } else {
             //Toast.makeText(this, "当前设备已连接", Toast.LENGTH_SHORT).show();
             MyToast.show("当前设备已连接");
+            dismissLoading();
         }
     }
 
@@ -499,7 +500,6 @@ public abstract class BTBaseActivity extends BaseActivity {
         Message message = new Message();
         message.what = DISCONNECT_SUCCESS;
         mHandler.sendMessage(message);
-
     }
 
     /**
@@ -509,8 +509,16 @@ public abstract class BTBaseActivity extends BaseActivity {
      */
     protected abstract void addDev(BluetoothDevice bluetoothDevice);
 
+    /**
+     * 接收到设备返回
+     * @param hexStr
+     */
     protected abstract void receive(String hexStr);
 
+    /**
+     * 成功断开连接
+     */
+    protected abstract void disconnectSuccess();
 
     private Handler mHandler = new Handler() {
         @Override
@@ -564,7 +572,7 @@ public abstract class BTBaseActivity extends BaseActivity {
                 case DISCONNECT_SUCCESS:
                     //tvCurConState.setText("断开成功");
                     curConnState = false;
-
+                    disconnectSuccess();
                     break;
 
                 case SEND_FAILURE: //发送失败
