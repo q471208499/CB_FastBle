@@ -19,6 +19,9 @@ import com.clj.bt.ConnectThread;
 import com.clj.bt.ConnectedThread;
 import com.clj.bt.utils.ClsUtils;
 
+import java.lang.reflect.Method;
+import java.util.Set;
+
 import cn.cb.baselibrary.activity.BaseActivity;
 import cn.cb.baselibrary.utils.SPUtils;
 import es.dmoral.toasty.MyToast;
@@ -633,6 +636,40 @@ public abstract class BTBaseActivity extends BaseActivity {
             return false;
         }
         return bluetoothDevice.getAddress().equals(lastMac);
+    }
+
+    /**
+     * 经典蓝牙是否已连接设备，通过上一次保存的最后连接成功蓝牙匹配
+     *
+     * @return
+     */
+    protected boolean isBtConDeviceByLastMac() {
+        String strCurBtMac = SPUtils.getInstance().getString(CONNECT_MAC);
+        if (bluetoothAdapter == null || strCurBtMac == null || strCurBtMac.isEmpty()) {
+            return false;
+        }
+        Set<BluetoothDevice> set = bluetoothAdapter.getBondedDevices();
+        BluetoothDevice device = null;
+        for (BluetoothDevice dev : set) {
+            if (dev.getAddress().equalsIgnoreCase(strCurBtMac)) {
+                device = dev;
+                break;
+            }
+        }
+        if (device == null) {
+            return false;
+        }
+        //得到BluetoothDevice的Class对象
+        Class<BluetoothDevice> bluetoothDeviceClass = BluetoothDevice.class;
+        try {//得到连接状态的方法
+            Method method = bluetoothDeviceClass.getDeclaredMethod("isConnected", (Class[]) null);
+            //打开权限
+            method.setAccessible(true);
+            return (boolean) method.invoke(device, (Object[]) null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
