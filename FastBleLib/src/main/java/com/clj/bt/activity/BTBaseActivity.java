@@ -26,19 +26,19 @@ import es.dmoral.toasty.MyToast;
 public abstract class BTBaseActivity extends BaseActivity {
     private final String TAG = getClass().getSimpleName();
 
-    private static final int CONNECT_SUCCESS = 0x01;
-    private static final int CONNECT_FAILURE = 0x02;
-    private static final int DISCONNECT_SUCCESS = 0x03;
-    private static final int SEND_SUCCESS = 0x04;
-    private static final int SEND_FAILURE = 0x05;
-    private static final int RECEIVE_SUCCESS = 0x06;
-    private static final int RECEIVE_FAILURE = 0x07;
-    private static final int START_DISCOVERY = 0x08;
-    private static final int STOP_DISCOVERY = 0x09;
-    private static final int DISCOVERY_DEVICE = 0x0A;
-    private static final int DEVICE_BOND_NONE = 0x0B;
-    private static final int DEVICE_BONDING = 0x0C;
-    private static final int DEVICE_BONDED = 0x0D;
+    protected static final int CONNECT_SUCCESS = 0x01;
+    protected static final int CONNECT_FAILURE = 0x02;
+    protected static final int DISCONNECT_SUCCESS = 0x03;
+    protected static final int SEND_SUCCESS = 0x04;
+    protected static final int SEND_FAILURE = 0x05;
+    protected static final int RECEIVE_SUCCESS = 0x06;
+    protected static final int RECEIVE_FAILURE = 0x07;
+    protected static final int START_DISCOVERY = 0x08;
+    protected static final int STOP_DISCOVERY = 0x09;
+    protected static final int DISCOVERY_DEVICE = 0x0A;
+    protected static final int DEVICE_BOND_NONE = 0x0B;
+    protected static final int DEVICE_BONDING = 0x0C;
+    protected static final int DEVICE_BONDED = 0x0D;
 
     private BtBroadcastReceiver btBroadcastReceiver;
     private BluetoothAdapter bluetoothAdapter;
@@ -366,9 +366,9 @@ public abstract class BTBaseActivity extends BaseActivity {
     /**
      * 连接状态回调
      *
-     * @param connect false 断开； true 连接
+     * @param connect CONNECT_SUCCESS，CONNECT_FAILURE， DISCONNECT_SUCCESS
      */
-    protected abstract void callbackConnectStatus(boolean connect);
+    protected abstract void callbackConnectStatus(int connect);
 
     ///////////////////////////////////  管理已有连接、收发数据  //////////////////////////////////
 
@@ -556,6 +556,7 @@ public abstract class BTBaseActivity extends BaseActivity {
                     MyToast.show("连接失败");
                     dismissLoading();
                     //tvCurConState.setText("连接失败");
+                    callbackConnectStatus(CONNECT_FAILURE);
                     curConnState = false;
                     break;
 
@@ -565,7 +566,7 @@ public abstract class BTBaseActivity extends BaseActivity {
                     curConnState = true;
                     dismissLoading();
                     saveConnectMac();
-                    callbackConnectStatus(true);
+                    callbackConnectStatus(CONNECT_SUCCESS);
                     //llDataSendReceive.setVisibility(View.VISIBLE);
                     //llDeviceList.setVisibility(View.GONE);
                     break;
@@ -574,7 +575,7 @@ public abstract class BTBaseActivity extends BaseActivity {
                     //tvCurConState.setText("断开成功");
                     Log.d(TAG, "断开成功");
                     curConnState = false;
-                    callbackConnectStatus(false);
+                    callbackConnectStatus(DISCONNECT_SUCCESS);
                     break;
 
                 case SEND_FAILURE: //发送失败
