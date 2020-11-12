@@ -556,8 +556,8 @@ public abstract class BTBaseActivity extends BaseActivity {
                     MyToast.show("连接失败");
                     dismissLoading();
                     //tvCurConState.setText("连接失败");
-                    callbackConnectStatus(CONNECT_FAILURE);
                     curConnState = false;
+                    callbackConnectStatus(CONNECT_FAILURE);
                     break;
 
                 case CONNECT_SUCCESS:  //连接成功
