@@ -24,6 +24,7 @@ import com.clj.bt.utils.SendDataHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.cb.baselibrary.utils.ViewUtils;
 import cn.cb.baselibrary.widget.MyDividerItemDecoration;
 import es.dmoral.toasty.MyToast;
 
@@ -47,8 +48,10 @@ public class BTActivity extends BTBaseActivity {
     }
 
     @Override
-    protected void connectSuccess() {
-        handler.sendEmptyMessage(READING_BTN_WHAT);
+    protected void callbackConnectStatus(boolean connect) {
+        if (connect) {
+            handler.sendEmptyMessage(READING_BTN_WHAT);
+        }
     }
 
     private Handler handler = new Handler() {
@@ -78,8 +81,8 @@ public class BTActivity extends BTBaseActivity {
             readingBtn.setVisibility(View.VISIBLE);
         }
 
-        setOutline(devRecyclerView);
-        setOutline(readingView);
+        ViewUtils.setOutline(devRecyclerView);
+        ViewUtils.setOutline(readingView);
     }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {

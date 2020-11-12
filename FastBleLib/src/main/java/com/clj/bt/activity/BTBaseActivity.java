@@ -331,7 +331,6 @@ public abstract class BTBaseActivity extends BaseActivity {
                 Log.d(TAG, "startConnectDevice-->移除连接超时");
                 Log.w(TAG, "startConnectDevice-->连接成功");
                 MyToast.show("连接成功");
-                connectSuccess();
 
                 Message message = new Message();
                 message.what = CONNECT_SUCCESS;
@@ -364,7 +363,12 @@ public abstract class BTBaseActivity extends BaseActivity {
         mHandler.postDelayed(connectOuttimeRunnable, conOutTime);
     }
 
-    protected abstract void connectSuccess();
+    /**
+     * 连接状态回调
+     *
+     * @param connect false 断开； true 连接
+     */
+    protected abstract void callbackConnectStatus(boolean connect);
 
     ///////////////////////////////////  管理已有连接、收发数据  //////////////////////////////////
 
@@ -511,14 +515,10 @@ public abstract class BTBaseActivity extends BaseActivity {
 
     /**
      * 接收到设备返回
+     *
      * @param hexStr
      */
     protected abstract void receive(String hexStr);
-
-    /**
-     * 成功断开连接
-     */
-    protected abstract void disconnectSuccess();
 
     private Handler mHandler = new Handler() {
         @Override
@@ -565,14 +565,16 @@ public abstract class BTBaseActivity extends BaseActivity {
                     curConnState = true;
                     dismissLoading();
                     saveConnectMac();
+                    callbackConnectStatus(true);
                     //llDataSendReceive.setVisibility(View.VISIBLE);
                     //llDeviceList.setVisibility(View.GONE);
                     break;
 
                 case DISCONNECT_SUCCESS:
                     //tvCurConState.setText("断开成功");
+                    Log.d(TAG, "断开成功");
                     curConnState = false;
-                    disconnectSuccess();
+                    callbackConnectStatus(false);
                     break;
 
                 case SEND_FAILURE: //发送失败
