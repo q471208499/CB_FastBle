@@ -57,7 +57,7 @@ public abstract class BTBaseActivity extends BaseActivity {
     //发起连接的线程
     private ConnectThread connectThread;
     //管理连接的线程
-    private ConnectedThread connectedThread;
+    protected ConnectedThread connectedThread;
 
     private final String CONNECT_MAC = "ConnectMac";
 
