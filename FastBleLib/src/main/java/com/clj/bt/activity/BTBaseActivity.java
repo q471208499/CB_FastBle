@@ -73,7 +73,7 @@ public abstract class BTBaseActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //disconnectBT(); 退出activity 不断开蓝牙
+        disconnectBT(); //退出activity 不断开蓝牙
         //注销广播接收
         unregisterReceiver(btBroadcastReceiver);
     }
@@ -341,7 +341,7 @@ public abstract class BTBaseActivity extends BaseActivity {
 
                 //标记当前连接状态为true
                 curConnState = true;
-                setBluetoothSocket(bluetoothSocket);
+                setBluetoothDevice(bluetoothDevice);
                 //管理连接，收发数据
                 managerConnectSendReceiveData(bluetoothSocket);
             }
@@ -367,7 +367,7 @@ public abstract class BTBaseActivity extends BaseActivity {
         mHandler.postDelayed(connectOuttimeRunnable, conOutTime);
     }
 
-    protected abstract void setBluetoothSocket(BluetoothSocket bluetoothSocket);
+    protected abstract void setBluetoothDevice(BluetoothDevice bluetoothDevice);
 
     /**
      * 连接状态回调
