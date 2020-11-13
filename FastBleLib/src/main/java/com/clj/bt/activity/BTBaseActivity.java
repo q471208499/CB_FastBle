@@ -341,6 +341,7 @@ public abstract class BTBaseActivity extends BaseActivity {
 
                 //标记当前连接状态为true
                 curConnState = true;
+                setBluetoothSocket(bluetoothSocket);
                 //管理连接，收发数据
                 managerConnectSendReceiveData(bluetoothSocket);
             }
@@ -365,6 +366,8 @@ public abstract class BTBaseActivity extends BaseActivity {
         //设置连接超时时间
         mHandler.postDelayed(connectOuttimeRunnable, conOutTime);
     }
+
+    abstract void setBluetoothSocket(BluetoothSocket bluetoothSocket);
 
     /**
      * 连接状态回调
