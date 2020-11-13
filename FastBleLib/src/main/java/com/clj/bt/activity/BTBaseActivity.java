@@ -367,7 +367,7 @@ public abstract class BTBaseActivity extends BaseActivity {
         mHandler.postDelayed(connectOuttimeRunnable, conOutTime);
     }
 
-    abstract void setBluetoothSocket(BluetoothSocket bluetoothSocket);
+    protected abstract void setBluetoothSocket(BluetoothSocket bluetoothSocket);
 
     /**
      * 连接状态回调
