@@ -1,5 +1,6 @@
 package com.clj.bt.utils645;
 
+import com.clj.bt.common.IReceiveDataHelper;
 import com.clj.fastble.utils.HexUtil;
 
 /**
@@ -8,7 +9,7 @@ import com.clj.fastble.utils.HexUtil;
  * 接收数据域 需要解密 减去33
  * 2020年12月16日 chenb
  */
-public class ReceiveDataHelper645 {
+public class ReceiveDataHelper645 implements IReceiveDataHelper {
     private final String DATA_CJ645_HEAD = "68";
     /** 数据头 */
     private final String DATA_CJ645_HEAD_DATA = "6881";
@@ -25,6 +26,7 @@ public class ReceiveDataHelper645 {
      *
      * @return
      */
+    @Override
     public boolean isValidForCommon() {
         if (validBasis()) return false;
         return isValidForCommon(hexStr);
@@ -51,6 +53,7 @@ public class ReceiveDataHelper645 {
         return hexStr == null || hexStr.isEmpty() || hexStr.length() % 2 == 1;
     }
 
+    @Override
     public String getMeterAddress() {
         String myHexStr = hexStr.substring(hexStr.indexOf(DATA_CJ645_HEAD));
         StringBuilder sb = new StringBuilder();
@@ -68,7 +71,8 @@ public class ReceiveDataHelper645 {
      *
      * @return
      */
-    public double getYSL() {
+    @Override
+    public String getYSL() {
         String myHexStr = hexStr.substring(hexStr.indexOf(DATA_CJ645_HEAD_DATA));
         StringBuilder sb = new StringBuilder();
         sb.append(decrypt645(myHexStr.substring(16, 18)))
@@ -76,7 +80,7 @@ public class ReceiveDataHelper645 {
                 .append(decrypt645(myHexStr.substring(12, 14)))
                 .append(".")
                 .append(decrypt645(myHexStr.substring(10, 12)));
-        return Double.parseDouble(sb.toString());
+        return String.valueOf(Double.parseDouble(sb.toString()));//去掉前面可能存在0
     }
 
 

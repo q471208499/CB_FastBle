@@ -1,9 +1,11 @@
 package com.clj.bt.utils;
 
+import com.clj.bt.common.IReceiveDataHelper;
+
 /**
  * 接收数据 工具助手
  */
-public class ReceiveDataHelper {
+public class ReceiveDataHelper implements IReceiveDataHelper {
     private final String DATA_CJ188_HEAD = "68";
     private final String DATA_CJ188_END = "16";
 
@@ -18,6 +20,7 @@ public class ReceiveDataHelper {
      *
      * @return
      */
+    @Override
     public boolean isValidForCommon() {
         if (validBasis()) return false;
         return isValidForCommon(hexStr);
@@ -49,15 +52,17 @@ public class ReceiveDataHelper {
      *
      * @return
      */
-    public int getYSL() {
+    @Override
+    public String getYSL() {
         String myHexStr = hexStr.substring(hexStr.indexOf(DATA_CJ188_HEAD));
         StringBuilder sb = new StringBuilder();
         sb.append(myHexStr.substring(34, 36))
                 .append(myHexStr.substring(32, 34))
                 .append(myHexStr.substring(30, 32));
-        return Integer.parseInt(sb.toString());
+        return String.valueOf(Integer.parseInt(sb.toString()));
     }
 
+    @Override
     public String getMeterAddress() {
         String myHexStr = hexStr.substring(hexStr.indexOf(DATA_CJ188_HEAD));
         StringBuilder sb = new StringBuilder();

@@ -1,5 +1,6 @@
 package com.clj.bt.utils645;
 
+import com.clj.bt.common.ISendHelper;
 import com.clj.fastble.utils.HexUtil;
 
 /**
@@ -10,7 +11,7 @@ import com.clj.fastble.utils.HexUtil;
  * 接收数据域 需要解密 减去33
  * 2020年12月16日 chenb
  */
-public class SendDataHelper645 {
+public class SendDataHelper645 implements ISendHelper {
     private String meterAddress;
 
     public SendDataHelper645(String meterAddress) {
@@ -31,6 +32,7 @@ public class SendDataHelper645 {
         }
     }
 
+    @Override
     public byte[] getData() {
         byte[] bytes = new byte[19];
         bytes[0] = (byte) 0xFE;

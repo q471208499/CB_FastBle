@@ -1,11 +1,12 @@
 package com.clj.bt.utils;
 
+import com.clj.bt.common.ISendHelper;
 import com.clj.fastble.utils.HexUtil;
 
 /**
  * 发送数据 工具助手
  */
-public class SendDataHelper {
+public class SendDataHelper implements ISendHelper {
     private String meterAddress;
 
     public SendDataHelper(String meterAddress) {
@@ -31,6 +32,7 @@ public class SendDataHelper {
      * 完整数据例子：FE FE FE 68 10 AA AA AA AA AA AA AA 01 03 90 1F 01 D2 16
      * @return
      */
+    @Override
     public byte[] getData() {
         byte[] bytes = new byte[19];
         bytes[0] = (byte) 0xFE;
