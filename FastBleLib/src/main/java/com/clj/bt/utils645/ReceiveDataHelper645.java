@@ -87,7 +87,8 @@ public class ReceiveDataHelper645 implements IReceiveDataHelper {
     private String decrypt645(String hexStr) {
         int srcI = Integer.parseInt(hexStr, 16);
         int keyI = Integer.parseInt("33", 16);
-        return Integer.toHexString(srcI - keyI);
+        //return Integer.toHexString(srcI - keyI);
+        return String.format("%02x", srcI - keyI);
     }
 
     public boolean isValidForCJ645() {
@@ -100,11 +101,13 @@ public class ReceiveDataHelper645 implements IReceiveDataHelper {
     }
 
     public static void main(String[] args) {
-        ReceiveDataHelper645 helper645 = new ReceiveDataHelper645("FE FE FE 68 92 01 00 10 00 00 68 81 06 43 C3 33 BB 33 33 54 16 ");
+        ReceiveDataHelper645 helper645 = new ReceiveDataHelper645("6802020010000068810643C3333534334016");
         System.out.println(helper645.getMeterAddress());
         System.out.println(helper645.isValidForCJ645());
         System.out.println(helper645.validBasis());
         System.out.println(helper645.getYSL());
+
+        System.out.println(String.format("%02x", 10));
         /*int i = Integer.parseInt("3333bb33", 16);
         System.out.println(i);
         int a = i - Integer.parseInt("33333333", 16);
