@@ -48,11 +48,21 @@ public class BTActivity extends BTBaseActivity {
     }
 
     @Override
+    protected void setBluetoothDevice(BluetoothDevice bluetoothDevice) {
+
+    }
+
+    @Override
+    protected void callbackConnectStatus(int connect) {
+
+    }
+
+    /*@Override
     protected void callbackConnectStatus(boolean connect) {
         if (connect) {
             handler.sendEmptyMessage(READING_BTN_WHAT);
         }
-    }
+    }*/
 
     private Handler handler = new Handler() {
         @Override
