@@ -38,7 +38,8 @@ public class ReceiveDataHelper implements IReceiveDataHelper {
         return calcValue == compareValue;
     }
 
-    public boolean isValidForCJ188() {
+    @Override
+    public boolean isValid() {
         if (hexStr.contains(DATA_CJ188_HEAD) && hexStr.lastIndexOf(DATA_CJ188_END) > -1) {
             String myHexStr = hexStr.substring(hexStr.indexOf(DATA_CJ188_HEAD));
             if (validBasis()) return false;
@@ -93,8 +94,8 @@ public class ReceiveDataHelper implements IReceiveDataHelper {
         ReceiveDataHelper helper = new ReceiveDataHelper("6810090200100000008116901F0100222200000000000000000016");
         //ReceiveDataHelper helper = new ReceiveDataHelper("6810090200100000008116901F01002222002C000000002C0000000000000000007616");
         System.out.println(helper.isValidForCommon());
-        System.out.println(helper.isValidForCJ188());
-        if (helper.isValidForCJ188()) {
+        System.out.println(helper.isValid());
+        if (helper.isValid()) {
             System.out.println("累计水量：" + helper.getYSL());
             System.out.println("水表编号：" + helper.getMeterAddress());
         }

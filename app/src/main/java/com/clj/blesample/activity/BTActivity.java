@@ -181,7 +181,7 @@ public class BTActivity extends BTBaseActivity {
             completeData.append(hexStr);
             if (hexStr.endsWith("16")) {
                 ReceiveDataHelper helper = new ReceiveDataHelper(completeData.toString());
-                if (helper.isValidForCJ188()) {
+                if (helper.isValid()) {
                     Log.i(TAG, "receive 完整帧数据: " + completeData.toString());
                     Log.i(TAG, "receive: 编号：" + helper.getMeterAddress() + " 用水量：" + helper.getYSL());
                     notifyItemChanged(helper);
@@ -194,7 +194,7 @@ public class BTActivity extends BTBaseActivity {
     private void notifyItemChanged(ReceiveDataHelper helper) {
         for (int i = 0; i < readingList.size(); i++) {
             if (helper.getMeterAddress().contains(readingList.get(i).getMeterAddress())) {
-                readingList.get(i).setFlow(helper.getYSL());
+                readingList.get(i).setFlow(Integer.parseInt(helper.getYSL()));
                 readingList.get(i).setStatus(ReadingBean.STATUS_SUCCESS);
                 readingAdapter.notifyItemChanged(i);
             }

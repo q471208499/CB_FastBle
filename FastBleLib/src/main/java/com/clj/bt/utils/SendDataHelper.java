@@ -15,21 +15,39 @@ public class SendDataHelper implements ISendHelper {
     }
 
     private void fixMeterAddress() {
+        meterAddress = fixMeterAddress(meterAddress);
+        meterAddress = HexUtil.bigOrSmallEndian(meterAddress);
+    }
+
+    private String fixMeterAddress(String meterAddress) {
+        return fixMeterAddress(meterAddress, 14);
+    }
+
+    private String fixMeterAddress(String meterAddress, int length) {
         if (meterAddress == null || meterAddress.isEmpty()) {
-            new Throwable("meterAddress is null or empty");
+            try {
+                throw new Exception("fixMeterAddress is null or empty.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         meterAddress = meterAddress.replaceAll(" ", "");
-        meterAddress = HexUtil.bigOrSmallEndian(meterAddress);
-        if (meterAddress.length() < 14) {
-            meterAddress = HexUtil.fixStrAdd0ForLength(meterAddress, 14);
-        } else if (meterAddress.length() > 14) {
-            // do something
+        if (meterAddress.length() < length) {
+            meterAddress = HexUtil.fixStrAdd0ForLengthPrefix(meterAddress, 12);
+        } else if (meterAddress.length() > length) {
+            try {
+                throw new Exception("fixMeterAddress length is too long.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        return meterAddress;
     }
 
     /**
      * 前面三个字节：FE FE FE 必须填写，188协议必须
      * 完整数据例子：FE FE FE 68 10 AA AA AA AA AA AA AA 01 03 90 1F 01 D2 16
+     *
      * @return
      */
     @Override
@@ -53,33 +71,39 @@ public class SendDataHelper implements ISendHelper {
         return bytes;
     }
 
-    //FE FE FE 68 10 AA AA AA AA AA AA AA 01 03 90 1F 01 D2 16
-    public static byte[] testMeterAddress() {
-        byte[] bytes = new byte[16];
+    @Override
+    public byte[] getSetAddressData(String newAddress, String keyword) {
+        return getSetAddressData(newAddress, null);
+    }
+
+    public byte[] getSetAddressData(String newAddress){
+        newAddress = fixMeterAddress(newAddress);
+        newAddress = HexUtil.bigOrSmallEndian(newAddress);
+        byte[] bytes = new byte[26];
         bytes[0] = (byte) 0xFE;
         bytes[1] = (byte) 0xFE;
         bytes[2] = (byte) 0xFE;
         bytes[3] = 0x68;
-        bytes[4] = (byte) 0x10;
-        bytes[5] = (byte) 0xAA;
-        bytes[6] = (byte) 0xAA;
-        bytes[7] = (byte) 0xAA;
-        bytes[8] = (byte) 0xAA;
-        bytes[9] = (byte) 0xAA;
-        bytes[10] = (byte) 0xAA;
-        bytes[11] = (byte) 0xAA;
-        bytes[12] = (byte) 0x01;
-        bytes[13] = (byte) 0x03;
-        bytes[14] = (byte) 0x90;
-        bytes[15] = (byte) 0x1F;
-        bytes[16] = (byte) 0x01;
-        bytes[17] = (byte) 0xD2;
-        bytes[18] = (byte) 0x16;
+        bytes[4] = (byte) 0xAA;
+        for (int i = 0; i < (meterAddress.length() / 2); i++) {
+            bytes[5 + i] = HexUtil.str2Bcd(meterAddress.substring(i * 2, (i + 1) * 2))[0];
+        }
+        bytes[12] = 0x15;
+        bytes[13] = 0x0A;
+        bytes[14] = (byte) 0xA0;
+        bytes[15] = 0x18;
+        bytes[16] = 0x00;
+        for (int i = 0; i < (newAddress.length() / 2); i++) {
+            bytes[17 + i] = HexUtil.str2Bcd(newAddress.substring(i * 2, (i + 1) * 2))[0];
+        }
+        bytes[24] = getCS(bytes);
+        bytes[25] = 0x16;
         return bytes;
     }
 
     /**
      * 默认FE 不纳入校验计算，所以开始i = 3
+     *
      * @param bytes
      * @return
      */
@@ -90,15 +114,6 @@ public class SendDataHelper implements ISendHelper {
         }
         int sumDec = toBeSum % 256;
         return (byte) sumDec;
-    }
-
-    private static String hexCS(String hex) {
-        int calcValueCount = 0;
-        hex = hex.replaceAll(" ", "");
-        for (int i = 0; i < hex.length() / 2; i++) {
-            calcValueCount += Integer.valueOf(hex.substring(i * 2, (i + 1) * 2), 16);
-        }
-        return Integer.toHexString(calcValueCount % 256);
     }
 
     public static String bytes2HexString(byte[] b, boolean space) {
@@ -121,8 +136,9 @@ public class SendDataHelper implements ISendHelper {
     }
 
     public static void main(String[] args) {
-        /*SendDataHelper helper = new SendDataHelper("01000005080000");
-        System.out.println(bytes2HexString(helper.getData(), false));*/
+        SendDataHelper helper = new SendDataHelper("10000192");
+        System.out.println(bytes2HexString(helper.getData(), true));
+        System.out.println(bytes2HexString(helper.getSetAddressData("10000192"), true));
         //68 10 10 00 01 91 00 00 00 03 03 0A 81 00 49 16
         //System.out.println(hexCS("68 10 01 00 00 05 08 00 00 01 03 90 1F 01"));
     }

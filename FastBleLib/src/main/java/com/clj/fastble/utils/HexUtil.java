@@ -332,6 +332,12 @@ public class HexUtil {
         return sb.toString();
     }
 
+    /**
+     * 尾部添加00
+     * @param string
+     * @param length
+     * @return
+     */
     public static String fixStrAdd0ForLength(String string, int length) {
         if (string == null || string.isEmpty() || string.length() >= length) {
             return string;
@@ -343,7 +349,26 @@ public class HexUtil {
         return sb.toString();
     }
 
+    /**
+     * 头部添加00
+     * @param string
+     * @param length
+     * @return
+     */
+    public static String fixStrAdd0ForLengthPrefix(String string, int length) {
+        if (string == null || string.isEmpty() || string.length() >= length) {
+            return string;
+        }
+        StringBuilder sb = new StringBuilder();
+        while (sb.length() < length - string.length()) {
+            sb.append("0");
+        }
+        sb.append(string);
+        return sb.toString();
+    }
+
     public static void main(String[] args) {
         System.out.println(fixStrAdd0ForLength("3434", 8));
+        System.out.println(fixStrAdd0ForLengthPrefix("3434", 8));
     }
 }

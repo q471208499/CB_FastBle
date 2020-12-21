@@ -1,7 +1,6 @@
 package com.clj.bt.utils645;
 
 import com.clj.bt.common.IReceiveDataHelper;
-import com.clj.fastble.utils.HexUtil;
 
 /**
  * 645 协议 接收报文助手
@@ -91,7 +90,8 @@ public class ReceiveDataHelper645 implements IReceiveDataHelper {
         return String.format("%02x", srcI - keyI);
     }
 
-    public boolean isValidForCJ645() {
+    @Override
+    public boolean isValid() {
         if (hexStr.contains(DATA_CJ645_HEAD) && hexStr.lastIndexOf(DATA_CJ645_END) > -1) {
             String myHexStr = hexStr.substring(hexStr.indexOf(DATA_CJ645_HEAD));
             if (validBasis()) return false;
@@ -103,7 +103,7 @@ public class ReceiveDataHelper645 implements IReceiveDataHelper {
     public static void main(String[] args) {
         ReceiveDataHelper645 helper645 = new ReceiveDataHelper645("6802020010000068810643C3333534334016");
         System.out.println(helper645.getMeterAddress());
-        System.out.println(helper645.isValidForCJ645());
+        System.out.println(helper645.isValid());
         System.out.println(helper645.validBasis());
         System.out.println(helper645.getYSL());
 
