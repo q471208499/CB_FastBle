@@ -19,7 +19,8 @@ public class SendDataHelper implements ISendHelper {
         meterAddress = HexUtil.bigOrSmallEndian(meterAddress);
     }
 
-    private String fixMeterAddress(String meterAddress) {
+    @Override
+    public String fixMeterAddress(String meterAddress) {
         return fixMeterAddress(meterAddress, 14);
     }
 

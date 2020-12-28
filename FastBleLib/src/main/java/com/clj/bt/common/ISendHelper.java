@@ -11,4 +11,6 @@ public interface ISendHelper {
      * @param newAddress 新地址
      */
     byte[] getSetAddressData(String newAddress, String keyword);
+
+    String fixMeterAddress(String meterAddress);
 }
