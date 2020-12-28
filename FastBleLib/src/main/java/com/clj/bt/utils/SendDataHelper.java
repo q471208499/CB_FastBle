@@ -73,7 +73,7 @@ public class SendDataHelper implements ISendHelper {
 
     @Override
     public byte[] getSetAddressData(String newAddress, String keyword) {
-        return getSetAddressData(newAddress, null);
+        return getSetAddressData(newAddress);
     }
 
     public byte[] getSetAddressData(String newAddress){
