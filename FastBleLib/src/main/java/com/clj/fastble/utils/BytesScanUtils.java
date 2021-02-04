@@ -22,33 +22,37 @@ public class BytesScanUtils {
 
     public boolean isValid() {
         if (hexStr.contains(DATA_HEADER)) {//校验包头
-            int dataStart = hexStr.indexOf(DATA_HEADER);
-            //System.out.println("数据开始下标：" + dataStart);
-            String dateBytesLengthHex = hexStr.substring(dataStart + DATA_HEADER.length(), dataStart + DATA_HEADER.length() + 2);
-            //System.out.println("数据字节长度：0x" + dateBytesLengthHex);
-            int dateBytesLength = Integer.parseInt(dateBytesLengthHex, 16);
-            //System.out.println("数据字节长度：" + dateBytesLength);
-            String allADData = hexStr.substring(dataStart, dataStart + dateBytesLength * 2);
-            //System.out.println("广播数据：0x" + allADData);
-            if (allADData.endsWith(DATA_END)) {//校验包尾
-                //String validData = allADData.substring(4 * 2, (dateBytesLength - 2) * 2);//有效数据
-                //System.out.println("有效数据：" + validData);
-                String toBeSum = allADData.substring(0, (dateBytesLength - 2) * 2);
-                //System.out.println("待校验：0x" + toBeSum);
-                int sumDec = 0;//十进制 校验和
-                for (int i = 0; i < toBeSum.length() / 2; i++) {
-                    String itemHex = toBeSum.substring(i * 2, (i + 1) * 2);
-                    int item = Integer.parseInt(itemHex, 16);
-                    sumDec += item;
+            try {
+                int dataStart = hexStr.indexOf(DATA_HEADER);
+                //System.out.println("数据开始下标：" + dataStart);
+                String dateBytesLengthHex = hexStr.substring(dataStart + DATA_HEADER.length(), dataStart + DATA_HEADER.length() + 2);
+                //System.out.println("数据字节长度：0x" + dateBytesLengthHex);
+                int dateBytesLength = Integer.parseInt(dateBytesLengthHex, 16);
+                //System.out.println("数据字节长度：" + dateBytesLength);
+                String allADData = hexStr.substring(dataStart, dataStart + dateBytesLength * 2);
+                //System.out.println("广播数据：0x" + allADData);
+                if (allADData.endsWith(DATA_END)) {//校验包尾
+                    //String validData = allADData.substring(4 * 2, (dateBytesLength - 2) * 2);//有效数据
+                    //System.out.println("有效数据：" + validData);
+                    String toBeSum = allADData.substring(0, (dateBytesLength - 2) * 2);
+                    //System.out.println("待校验：0x" + toBeSum);
+                    int sumDec = 0;//十进制 校验和
+                    for (int i = 0; i < toBeSum.length() / 2; i++) {
+                        String itemHex = toBeSum.substring(i * 2, (i + 1) * 2);
+                        int item = Integer.parseInt(itemHex, 16);
+                        sumDec += item;
+                    }
+                    //System.out.println("十进制 校验和：" + sumDec);
+                    String cs = allADData.substring((dateBytesLength - 2) * 2, (dateBytesLength - 1) * 2);
+                    //System.out.println("校验匹配：0x" + cs);
+                    int csInt = Integer.parseInt(cs, 16);
+                    //System.out.println("校验匹配值：" + csInt);
+                    int v = sumDec % 256;
+                    //System.out.println("待校验匹配值：" + v);
+                    return v == csInt;
                 }
-                //System.out.println("十进制 校验和：" + sumDec);
-                String cs = allADData.substring((dateBytesLength - 2) * 2, (dateBytesLength - 1) * 2);
-                //System.out.println("校验匹配：0x" + cs);
-                int csInt = Integer.parseInt(cs, 16);
-                //System.out.println("校验匹配值：" + csInt);
-                int v = sumDec % 256;
-                //System.out.println("待校验匹配值：" + v);
-                return v == csInt;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return false;
