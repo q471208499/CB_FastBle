@@ -77,6 +77,14 @@ public class BTProScan {
     public boolean verify() {
         if (adHex == null || adHex.trim().isEmpty()) return false;//字符串异常
 
+        if (adHex.contains(HEX_HEAD) && adHex.contains(HEX_END)) {//校验包头
+            if (adHex.indexOf(HEX_HEAD) - 2 > -1)
+                adHex = adHex.substring(adHex.indexOf(HEX_HEAD) - 2);
+            else
+                return false;
+        } else
+            return false;
+
         adHex = adHex.replace(" ", "");
         String head = adHex.substring(2, 4);
         String end = adHex.substring(adHex.length() - 2);
@@ -114,13 +122,13 @@ public class BTProScan {
         String cmdHex = adHex.substring(4, 6);
         String time = HexUtil.bigOrSmallEndian(adHex.substring(6, 10));
         String flowHex = HexUtil.bigOrSmallEndian(adHex.substring(10, 18));
-        double flow = Integer.parseInt(flowHex, RADIX_16) / 1000d;
+        double flow = Long.valueOf(flowHex, RADIX_16) / 1000d;
         String contraryHex = HexUtil.bigOrSmallEndian(adHex.substring(18, 26));
-        double contrary = Integer.parseInt(contraryHex, RADIX_16) / 1000d;
+        double contrary = Long.valueOf(contraryHex, RADIX_16) / 1000d;
         String instantaneousHex = HexUtil.bigOrSmallEndian(adHex.substring(26, 30));
-        int instantaneous = Integer.parseInt(instantaneousHex, RADIX_16);
+        long instantaneous = Long.valueOf(instantaneousHex, RADIX_16);
         String usageTimeHex = HexUtil.bigOrSmallEndian(adHex.substring(30, 34));
-        int usageTime = Integer.parseInt(usageTimeHex, RADIX_16);
+        long usageTime = Long.valueOf(usageTimeHex, RADIX_16);
         String voltageHex = HexUtil.bigOrSmallEndian(adHex.substring(34, 36));
         double voltage = (Integer.parseInt(voltageHex, RADIX_16) + 250) / 100d;
         String warningHex = adHex.substring(36, 38);
@@ -182,15 +190,15 @@ public class BTProScan {
     /**
      * 瞬时流量值
      */
-    public int getInstantaneous() {
-        return (int) dataMap.get(DATA_KEY_INSTANTANEOUS);
+    public long getInstantaneous() {
+        return (long) dataMap.get(DATA_KEY_INSTANTANEOUS);
     }
 
     /**
      * 连续用水时长
      */
-    public int getUsageTime() {
-        return (int) dataMap.get(DATA_KEY_USAGE_TIME);
+    public long getUsageTime() {
+        return (long) dataMap.get(DATA_KEY_USAGE_TIME);
     }
 
     /**
@@ -243,9 +251,11 @@ public class BTProScan {
     }
 
     public static void main(String[] args) {
-        BTProScan proScan = new BTProScan("14 68 01 25 02 4E 61 BC 00 69 B6 01 00 10 0E E0 01 7D BE 55 16");
+        String hex = "136801007874D75D5E5098CEB7AEA42E78004C16";
+        System.out.println(hex.substring(hex.indexOf(HEX_HEAD) - 2));
+        BTProScan proScan = new BTProScan(hex);
         if (proScan.verify()) {
-            System.out.println(proScan.getCmd());
+            System.out.println(proScan.getDataMap());
         }
     }
 }
