@@ -1,9 +1,12 @@
 package com.clj.fastble.utils;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class BTProScan {
+    private final String TAG = getClass().getSimpleName();
 
     public static final String HEX_HEAD = "68";
     public static final String HEX_END = "16";
@@ -76,6 +79,7 @@ public class BTProScan {
 
     public boolean verify() {
         if (adHex == null || adHex.trim().isEmpty()) return false;//字符串异常
+        adHex = adHex.replace(" ", "");
 
         if (adHex.contains(HEX_HEAD) && adHex.contains(HEX_END)) {//校验包头
             if (adHex.indexOf(HEX_HEAD) - 2 > -1)
@@ -85,14 +89,14 @@ public class BTProScan {
         } else
             return false;
 
-        adHex = adHex.replace(" ", "");
+        int lengthCal = Integer.valueOf(adHex.substring(0, 2), RADIX_16);
+        if (adHex.length() < (lengthCal + 1) * 2) return false;// 长度 不匹配
+        adHex = adHex.substring(0, (lengthCal + 1) * 2);
+        Log.i(TAG, "verify: " + adHex);
+
         String head = adHex.substring(2, 4);
         String end = adHex.substring(adHex.length() - 2);
         if (!HEX_HEAD.equals(head) || !HEX_END.equals(end)) return false;//标识头/尾 不匹配
-
-        int lengthCal = Integer.valueOf(adHex.substring(0, 2), RADIX_16);
-        int length = (adHex.length() - 2) / 2;
-        if (lengthCal != length) return false;// 长度 不匹配
 
         String csHex = adHex.substring(adHex.length() - 4, adHex.length() - 2);
         String toCalHex = adHex.substring(2, adHex.length() - 4);
@@ -251,8 +255,7 @@ public class BTProScan {
     }
 
     public static void main(String[] args) {
-        String hex = "136801007874D75D5E5098CEB7AEA42E78004C16";
-        System.out.println(hex.substring(hex.indexOf(HEX_HEAD) - 2));
+        String hex = "AAA136801007874D75D5E5098CEB7AEA42E78004C16AAA";
         BTProScan proScan = new BTProScan(hex);
         if (proScan.verify()) {
             System.out.println(proScan.getDataMap());
