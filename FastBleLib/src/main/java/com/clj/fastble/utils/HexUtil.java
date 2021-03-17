@@ -321,6 +321,7 @@ public class HexUtil {
         return result;
     }
 
+    /** 大小端互换 */
     public static String bigOrSmallEndian(String str) {
         if (str == null || str.isEmpty() || str.length() % 2 == 1) {
             return "";
