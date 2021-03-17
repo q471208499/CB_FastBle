@@ -70,6 +70,10 @@ public class BTProScan {
         this.adHex = adHex;
     }
 
+    public BTProScan(byte[] bytes) {
+        this.adHex = HexUtil.encodeHexStr(bytes);
+    }
+
     public boolean verify() {
         if (adHex == null || adHex.trim().isEmpty()) return false;//字符串异常
 
