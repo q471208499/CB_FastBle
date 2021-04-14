@@ -321,7 +321,9 @@ public class HexUtil {
         return result;
     }
 
-    /** 大小端互换 */
+    /**
+     * 大小端互换
+     */
     public static String bigOrSmallEndian(String str) {
         if (str == null || str.isEmpty() || str.length() % 2 == 1) {
             return "";
@@ -334,42 +336,106 @@ public class HexUtil {
     }
 
     /**
-     * 尾部添加00
-     * @param string
-     * @param length
+     * 左边 / 右边 添加0
+     *
+     * @param str
+     * @param strLength
+     * @param isRight
      * @return
      */
-    public static String fixStrAdd0ForLength(String string, int length) {
-        if (string == null || string.isEmpty() || string.length() >= length) {
-            return string;
+    public static String fixStrAdd0ForLength(String str, int strLength, boolean isRight) {
+        int strLen = str.length();
+        if (strLen < strLength) {
+            while (strLen < strLength) {
+                StringBuffer sb = new StringBuffer();
+                if (isRight) {
+                    sb.append(str).append("0");//右补0
+                } else {
+                    sb.append("0").append(str);// 左补0
+                }
+                str = sb.toString();
+                strLen = str.length();
+            }
         }
-        StringBuilder sb = new StringBuilder(string);
-        while (sb.length() < length) {
-            sb.append("0");
-        }
-        return sb.toString();
+        return str;
     }
 
     /**
-     * 头部添加00
-     * @param string
+     * 不足补0，过多去掉
+     *
+     * @return
+     */
+    public static String add0AndRemove(String str, int strLength, boolean isRight) {
+        if (str == null || str.length() == 0) {
+            return str;
+        }
+        if (str.length() > strLength) {
+            str = str.substring(0, strLength);
+        }
+        return fixStrAdd0ForLength(str, strLength, isRight);
+    }
+
+    /**
+     * 获取校验合
+     *
+     * @param bytes
+     * @return
+     */
+    public static byte getCS(byte[] bytes) {
+        int toBeSum = 0;
+        for (int i = 0; i < bytes.length - 1; i++) {
+            toBeSum += bytes[i];
+        }
+        int sumDec = toBeSum % 256;
+        return (byte) sumDec;
+    }
+
+    /**
+     * hex 计算校验合
+     *
+     * @param toCsHexStr
+     * @return
+     */
+    public static byte getCSByStr(String toCsHexStr) {
+        if (toCsHexStr == null || toCsHexStr.length() % 2 == 1) {
+            throw new RuntimeException(toCsHexStr + " 不符合规则");
+        }
+        int cs = 0;
+        for (int i = 0; i < toCsHexStr.length() / 2; i++) {
+            cs += Integer.parseInt(toCsHexStr.substring(2 * i, 2 + 2 * i), 16);
+        }
+        cs = cs % 256;
+        return (byte) cs;
+    }
+
+    /**
+     * dex 转 hex, 不足补0，然后大小端互换
+     *
+     * @param num
      * @param length
      * @return
      */
-    public static String fixStrAdd0ForLengthPrefix(String string, int length) {
-        if (string == null || string.isEmpty() || string.length() >= length) {
-            return string;
-        }
-        StringBuilder sb = new StringBuilder();
-        while (sb.length() < length - string.length()) {
-            sb.append("0");
-        }
-        sb.append(string);
-        return sb.toString();
+    public static byte[] dealInt(int num, int length) {
+        String numberHex = Integer.toHexString(num);
+        byte[] bytes = str2Bcd(numberHex);
+        String str = formatHexString(bytes);
+        return dealStr(str, length, false);
+    }
+
+    /**
+     * 不足补0，然后大小端互换
+     *
+     * @param str
+     * @param strLength
+     * @param isRight
+     * @return
+     */
+    public static byte[] dealStr(String str, int strLength, boolean isRight) {
+        str = add0AndRemove(str, strLength, isRight);
+        str = bigOrSmallEndian(str);
+        return str2Bcd(str);
     }
 
     public static void main(String[] args) {
-        System.out.println(fixStrAdd0ForLength("3434", 8));
-        System.out.println(fixStrAdd0ForLengthPrefix("3434", 8));
     }
 }

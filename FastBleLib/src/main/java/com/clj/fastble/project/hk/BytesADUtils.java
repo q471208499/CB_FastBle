@@ -1,8 +1,11 @@
-package com.clj.fastble.utils;
+package com.clj.fastble.project.hk;
+
+import com.clj.fastble.utils.HexUtil;
 
 import cn.cb.baselibrary.utils.ABDateUtils;
 
 /**
+ * to: 华科/捷先 数字秒通表
  * 数据格式：0x73,0x6A,0x0D,0X10,0x66,0x55,0x44,0x33,0x22,0x11,0x00,CS,0x16
  * 包头,包头,整个返回数据长度,指令,数据,数据,....,CS校验,包尾 CS校验 = (0x73+0x6A+....+0x36+0x00) % 256;
  */

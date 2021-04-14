@@ -1,12 +1,14 @@
-package com.clj.fastble.utils;
+package com.clj.fastble.project.blelz;
 
 import android.bluetooth.BluetoothDevice;
+
+import com.clj.fastble.utils.HexUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 杭州莱智科技 蓝牙助手
+ * to: 杭州莱智科技 蓝牙助手
  * 2020年8月27日
  * mAddress: D8:A9:8B:A4:9F:FA
  * getName: name = XC-LINK-8BA49FFA

@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.clj.blesample.R;
 import com.clj.blesample.listener.AdBtnCallback;
-import com.clj.fastble.utils.BytesADUtils;
+import com.clj.fastble.project.hk.BytesADUtils;
 
 public class AdDialog extends AlertDialog.Builder {
     private RadioGroup radioGroup;

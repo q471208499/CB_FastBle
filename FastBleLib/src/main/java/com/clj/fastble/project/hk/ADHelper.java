@@ -1,4 +1,4 @@
-package com.clj.fastble.utils;
+package com.clj.fastble.project.hk;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -9,6 +9,11 @@ import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.content.Context;
 import android.util.Log;
 
+import com.clj.fastble.utils.HexUtil;
+
+/**
+ * to: 华科/捷先 数字秒通表
+ */
 public class ADHelper {
     private final String TAG = getClass().getSimpleName();
 

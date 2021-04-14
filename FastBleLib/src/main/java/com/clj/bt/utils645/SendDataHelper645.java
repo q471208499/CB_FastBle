@@ -56,7 +56,7 @@ public class SendDataHelper645 implements ISendHelper {
         }
         meterAddress = meterAddress.replaceAll(" ", "");
         if (meterAddress.length() < length) {
-            meterAddress = HexUtil.fixStrAdd0ForLengthPrefix(meterAddress, 12);
+            meterAddress = HexUtil.fixStrAdd0ForLength(meterAddress, 12, false);
         } else if (meterAddress.length() > length) {
             try {
                 throw new Exception("fixMeterAddress length is too long.");

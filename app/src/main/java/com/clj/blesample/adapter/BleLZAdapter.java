@@ -27,10 +27,10 @@ import com.clj.fastble.callback.BleNotifyCallback;
 import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
-import com.clj.fastble.utils.ADHelper;
-import com.clj.fastble.utils.BytesScanUtils;
+import com.clj.fastble.project.hk.ADHelper;
+import com.clj.fastble.project.hk.BytesScanUtils;
 import com.clj.fastble.utils.HexUtil;
-import com.clj.fastble.utils.LzBleHelper;
+import com.clj.fastble.project.blelz.LzBleHelper;
 
 import java.lang.reflect.Field;
 import java.util.List;

@@ -24,7 +24,7 @@ import com.clj.blesample.dialog.AdDialog;
 import com.clj.blesample.listener.AdBtnCallback;
 import com.clj.fastble.activity.BleBaseActivity;
 import com.clj.fastble.data.BleDevice;
-import com.clj.fastble.utils.BytesScanUtils;
+import com.clj.fastble.project.hk.BytesScanUtils;
 import com.clj.fastble.utils.HexUtil;
 
 import java.util.List;

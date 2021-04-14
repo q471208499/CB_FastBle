@@ -1,5 +1,10 @@
-package com.clj.fastble.utils;
+package com.clj.fastble.project.hk;
 
+import com.clj.fastble.utils.HexUtil;
+
+/**
+ * to: 华科/捷先 数字秒通表
+ */
 public class BytesScanUtils {
     public static final String ORDER_01 = "01";
     public static final String ORDER_02 = "02";

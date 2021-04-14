@@ -1,9 +1,15 @@
-package com.clj.fastble.utils;
+package com.clj.fastble.project.blepro;
+
+import com.clj.fastble.utils.HexUtil;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class BTProScan {
+/**
+ * to: 高其如
+ * 2021-3-11
+ */
+public class BleProScan {
     private final String TAG = getClass().getSimpleName();
 
     public static final String HEX_HEAD = "68";
@@ -67,11 +73,11 @@ public class BTProScan {
     private String adHex;
     private Map<String, Object> dataMap = new HashMap<>();
 
-    public BTProScan(String adHex) {
+    public BleProScan(String adHex) {
         this.adHex = adHex;
     }
 
-    public BTProScan(byte[] bytes) {
+    public BleProScan(byte[] bytes) {
         this.adHex = HexUtil.encodeHexStr(bytes);
     }
 
@@ -262,7 +268,7 @@ public class BTProScan {
 
     public static void main(String[] args) {
         String hex = "14 68 01 30 17 B5 F3 C0 08 3E 1C 48 AC 00 00 00 00 78 00 E6 16 ";
-        BTProScan proScan = new BTProScan(hex);
+        BleProScan proScan = new BleProScan(hex);
         if (proScan.verify()) {
             System.out.println(proScan.getDataMap());
         }
