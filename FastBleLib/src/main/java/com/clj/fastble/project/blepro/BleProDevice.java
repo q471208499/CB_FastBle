@@ -70,7 +70,7 @@ public class BleProDevice {
             String csHex = hexStr.substring(hexStr.length() - 4, hexStr.length() - 2);
             int csInt = Integer.parseInt(csHex, 16);
             String toCsHexStr = hexStr.substring(0, hexStr.length() - 4);
-            return csInt == HexUtil.getCSByStr(toCsHexStr);//校验合判断
+            return (byte) csInt == HexUtil.getCSByStr(toCsHexStr);//校验合判断
         }
 
         private boolean validBasis() {
