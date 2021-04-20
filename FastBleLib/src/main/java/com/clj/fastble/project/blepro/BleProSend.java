@@ -20,6 +20,9 @@ public class BleProSend {
      * 02 00:信号发送间隔时间单位为秒，每2秒发送一次
      * 4D:校验和
      * 16:包尾，固定为16
+     * <p>
+     * 信号间隔 = 大端 转 小端 然后转 10进制
+     * 校时间隔 = 16进制 转 10进制 然后 乘以 信号间隔
      *
      * @param meterAddress 表地址
      * @param readNumber   表读数
@@ -39,8 +42,8 @@ public class BleProSend {
         for (int i = 0; i < numberBytes.length; i++) {
             resultBytes[9 + i] = numberBytes[i];
         }
-        time = time / 2;
-        resultBytes[13] = HexUtil.dealInt(time, 2)[0];
+        time = time / signaling;
+        resultBytes[13] = (byte) time;
         byte[] sBytes = HexUtil.dealInt(signaling, 4);
         for (int i = 0; i < sBytes.length; i++) {
             resultBytes[14 + i] = sBytes[i];
@@ -51,8 +54,7 @@ public class BleProSend {
     }
 
     public static void main(String[] args) {
-        byte[] bytes = getSettingData("112233445566", 15, 120, 2);
+        byte[] bytes = getSettingData("112233445566", 15, 120, 10);
         System.out.println(HexUtil.formatHexString(bytes, true));
-        //System.out.println(HexUtil.formatHexString(getDeviceInfoData(), true));
     }
 }

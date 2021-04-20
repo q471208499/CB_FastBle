@@ -188,7 +188,7 @@ public class BleProDevice {
     }
 
     public static void main(String[] args) {
-        BleProDevice.Receive receive = new BleProDevice.Receive("68 1C 21 66 55 44 33 22 11 0F 00 00 00 3C 02 00 01 00 FC 4D 5B 21 04 21 03 21 66 16");
+        BleProDevice.Receive receive = new BleProDevice.Receive("68 1C 21 01 00 22 03 21 20 53 01 00 00 64 05 00 45 4C 42 2D 59 53 01 18 03 21 B2 16 ");
         System.out.println(receive.isValidForCommon());
         System.out.println(receive.getDataMap());
         System.out.println(receive.getDeviceId());
