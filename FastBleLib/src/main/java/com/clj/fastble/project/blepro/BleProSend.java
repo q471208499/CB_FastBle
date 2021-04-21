@@ -2,6 +2,9 @@ package com.clj.fastble.project.blepro;
 
 import com.clj.fastble.utils.HexUtil;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * to: 高其如
  * 2021.04.12
@@ -54,7 +57,28 @@ public class BleProSend {
     }
 
     public static void main(String[] args) {
-        byte[] bytes = getSettingData("112233445566", 15, 120, 10);
+        byte[] bytes = getSettingData("112233445566", 2314, 120, 12);
         System.out.println(HexUtil.formatHexString(bytes, true));
+
+        Calendar c = Calendar.getInstance();
+        c.set(2021, 2, 20);
+
+        Calendar c2 = Calendar.getInstance();
+        c2.set(2021, 3, 20);
+        //c2.add(Calendar.DAY_OF_MONTH, 1);
+
+        System.out.println(differentDaysByMillisecond(c.getTime(), c2.getTime()));
+    }
+
+    /**
+     * 通过时间秒毫秒数判断两个时间的间隔
+     *
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static int differentDaysByMillisecond(Date date1, Date date2) {
+        int days = (int) ((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
+        return days;
     }
 }

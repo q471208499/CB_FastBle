@@ -77,18 +77,22 @@ public class BleProDevice {
             return hexStr == null || hexStr.isEmpty() || hexStr.length() % 2 == 1;
         }
 
+        /**
+         * 信号间隔 = 大端 转 小端 然后转 10进制
+         * 校时间隔 = 16进制 转 10进制 然后 乘以 信号间隔
+         *
+         * @return
+         */
         public Map<String, Object> getDataMap() {
             if (dataMap == null) {
-                //0F 00 00 00:设置水表底数
                 String flowHex = HexUtil.bigOrSmallEndian(hexStr.substring(18, 26));
                 double flow = Long.valueOf(flowHex, 16) / 1000d;
 
-                //3C=60  60*2=120秒 每120秒校时一次
-                String timeStr = HexUtil.bigOrSmallEndian(hexStr.substring(26, 28));
-                int time = Integer.parseInt(timeStr, 16) * 2;
-
                 String signalingStr = HexUtil.bigOrSmallEndian(hexStr.substring(28, 32));
-                int signaling = Integer.parseInt(signalingStr, 16) * 2;
+                int signaling = Integer.parseInt(signalingStr, 16);
+
+                String timeStr = HexUtil.bigOrSmallEndian(hexStr.substring(26, 28));
+                int time = Integer.parseInt(timeStr, 16) * signaling;
 
                 dataMap = new HashMap<>();
                 dataMap.put(KEY_METER_ADDRESS, HexUtil.bigOrSmallEndian(hexStr.substring(6, 18)));
