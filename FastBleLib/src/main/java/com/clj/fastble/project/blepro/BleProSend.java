@@ -57,7 +57,7 @@ public class BleProSend {
     }
 
     public static void main(String[] args) {
-        byte[] bytes = getSettingData("112233445566", 2314, 120, 12);
+        byte[] bytes = getSettingData("112233445566", 2314, 120, 10);
         System.out.println(HexUtil.formatHexString(bytes, true));
 
         Calendar c = Calendar.getInstance();

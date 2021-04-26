@@ -193,7 +193,7 @@ public class BleProDevice {
 
     public static void main(String[] args) {
         //比如收到的发送间隔是 0A，就是10秒，校时间隔是 0c 就是12, 那么就用12*10=120
-        BleProDevice.Receive receive = new BleProDevice.Receive("68 1C 21 01 00 22 03 21 20 53 01 00 00 0A 0C 00 45 4C 42 2D 59 53 01 18 03 21 B2 16 ");
+        BleProDevice.Receive receive = new BleProDevice.Receive("68 1c 21 00 00 00 00 00 00 0a 09 00 00 0c 0a 00 45 4c 42 2d 59 53 01 18 03 21 b7 16");
         System.out.println(receive.isValidForCommon());
         System.out.println(receive.getDataMap());
         System.out.println(receive.getDeviceId());

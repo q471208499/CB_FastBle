@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.cb.baselibrary.utils.ABDateUtils;
+
 public class BleProHistory {
 
     /**
@@ -21,17 +23,24 @@ public class BleProHistory {
     public static byte[] getBytesDate(int year, int month, int dayOfMonth, int days) {
         byte[] resultBytes = new byte[12];
         resultBytes[0] = 0x69;
-        resultBytes[1] = 0x0C;
+        resultBytes[1] = 0x13;
         resultBytes[2] = 0x30;
-        resultBytes[3] = HexUtil.str2Bcd(String.valueOf(dayOfMonth))[0];
-        resultBytes[4] = HexUtil.str2Bcd(String.valueOf(month))[0];
-        resultBytes[5] = HexUtil.str2Bcd(String.valueOf(year))[1];
-        resultBytes[6] = HexUtil.dealStr(Integer.toHexString(days), 4, false)[0];
-        resultBytes[7] = HexUtil.dealStr(Integer.toHexString(days), 4, false)[1];
-        resultBytes[8] = 0x00;//填充字节
-        resultBytes[9] = 0x00;//填充字节
-        resultBytes[10] = HexUtil.getCS(resultBytes);
-        resultBytes[11] = 0x16;
+
+        String curTime = ABDateUtils.getCurDateStr("yyyyMMddHHmmss");
+        byte[] curTimeBytes = HexUtil.dealStr(curTime, curTime.length(), true);
+        for (int i = 0; i < curTimeBytes.length; i++) {
+            resultBytes[3 + i] = curTimeBytes[i];
+        }
+
+        resultBytes[10] = HexUtil.str2Bcd(String.valueOf(dayOfMonth))[0];
+        resultBytes[11] = HexUtil.str2Bcd(String.valueOf(month))[0];
+        resultBytes[12] = HexUtil.str2Bcd(String.valueOf(year))[1];
+        resultBytes[13] = HexUtil.dealStr(Integer.toHexString(days), 4, false)[0];
+        resultBytes[14] = HexUtil.dealStr(Integer.toHexString(days), 4, false)[1];
+        resultBytes[15] = 0x00;//填充字节
+        resultBytes[16] = 0x00;//填充字节
+        resultBytes[17] = HexUtil.getCS(resultBytes);
+        resultBytes[18] = 0x16;
         return resultBytes;
     }
 
