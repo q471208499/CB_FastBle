@@ -21,7 +21,7 @@ public class BleProHistory {
      * @return
      */
     public static byte[] getBytesDate(int year, int month, int dayOfMonth, int days) {
-        byte[] resultBytes = new byte[12];
+        byte[] resultBytes = new byte[19];
         resultBytes[0] = 0x69;
         resultBytes[1] = 0x13;
         resultBytes[2] = 0x30;
