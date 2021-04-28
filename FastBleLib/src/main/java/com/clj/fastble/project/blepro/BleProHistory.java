@@ -2,6 +2,7 @@ package com.clj.fastble.project.blepro;
 
 import com.clj.fastble.utils.HexUtil;
 
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -97,9 +98,9 @@ public class BleProHistory {
                 for (int i = 0; i < increment.length; i++) {
                     increment[i] = Integer.parseInt(HexUtil.bigOrSmallEndian(flowListStr.substring(i * 4, i * 4 + 4)), 16);
                     if (i == 0)
-                        readNumber[i] = start + increment[i];
+                        readNumber[i] = start;
                     else
-                        readNumber[i] = readNumber[i - 1] + increment[i];
+                        readNumber[i] = readNumber[i - 1] + increment[i - 1];
                 }
 
                 dataMap = new HashMap<>();
@@ -182,5 +183,10 @@ public class BleProHistory {
         System.out.println(receive.getDataMap());
         System.out.println(Arrays.toString(receive.getIncrement()));
         System.out.println(Arrays.toString(receive.getReadNumber()));
+
+        int i = 110020;
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMinimumFractionDigits(3);
+        System.out.println(nf.format(i).replace(",", ""));
     }
 }
