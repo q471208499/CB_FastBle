@@ -1,8 +1,8 @@
 package com.clj.fastble.project.blepro;
 
+import com.alibaba.fastjson.JSONObject;
 import com.clj.fastble.utils.HexUtil;
 
-import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -91,7 +91,7 @@ public class BleProHistory {
                 String datePrefix = String.valueOf(Calendar.getInstance().get(Calendar.YEAR)).substring(0, 2);
                 String dateStr = datePrefix + HexUtil.bigOrSmallEndian(hexStr.substring(8, 14));
                 int start = Integer.parseInt(HexUtil.bigOrSmallEndian(hexStr.substring(14, 22)), 16);
-                String flowListStr = hexStr.substring(22, hexStr.length() - 8);
+                String flowListStr = hexStr.substring(22, hexStr.length() - 4);
                 int arrSize = flowListStr.length() / 4;
                 int[] increment = new int[arrSize];
                 int[] readNumber = new int[arrSize];
@@ -176,17 +176,14 @@ public class BleProHistory {
 
     public static void main(String[] args) {
         System.out.println(HexUtil.formatHexString(getBytesDate(2021, 4, 14, 10), true));
-        String hex = "68 3D 30 01 15 04 21 15 CD 5B 07 00 08 00 10 00 01 00 05 00 08 00 10 00 01 00 05 00 08 00 10 00 01 00 05 00 08 00 10 00 01 00 05 00 08 00 10 00 01 00 05 00 08 00 10 00 01 AF 16 C8 16";
 
+        String hex = "68 3D 30 FF 05 05 21 BB 41 02 00 05 00 18 00 53 00 42 00 09 00 20 00 33 00 06 00 15 00 4C 00 53 00 56 00 3D 00 5C 00 2B 00 2A 00 09 00 58 00 57 00 12 00 39 00 40 00 13 00 62 00 00 C1";
         BleProHistory.Receive receive = new Receive(hex);
         System.out.println(receive.isValidForCommon());
         System.out.println(receive.getDataMap());
         System.out.println(Arrays.toString(receive.getIncrement()));
         System.out.println(Arrays.toString(receive.getReadNumber()));
-
-        int i = 110020;
-        NumberFormat nf = NumberFormat.getInstance();
-        nf.setMinimumFractionDigits(3);
-        System.out.println(nf.format(i).replace(",", ""));
+        JSONObject object = new JSONObject(receive.getDataMap());
+        System.out.println(object.toString());
     }
 }
