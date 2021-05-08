@@ -443,6 +443,13 @@ public class HexUtil {
         return dealStr(str, length, false);
     }
 
+    public static byte[] dealLong(long num, int length) {
+        String numberHex = Long.toHexString(num);
+        byte[] bytes = str2Bcd(numberHex);
+        String str = formatHexString(bytes);
+        return dealStr(str, length, false);
+    }
+
     /**
      * 不足补0，然后大小端互换
      *

@@ -2,7 +2,7 @@ package com.clj.fastble.project.blepro;
 
 import com.clj.fastble.utils.HexUtil;
 
-import java.util.Calendar;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 /**
@@ -32,7 +32,7 @@ public class BleProSend {
      * @param time         校时 间隔
      * @param signaling    信号 间隔
      */
-    public static byte[] getSettingData(String meterAddress, int readNumber, int time, int signaling) {
+    public static byte[] getSettingData(String meterAddress, long readNumber, int time, int signaling) {
         byte[] resultBytes = new byte[19];
         resultBytes[0] = BlePro.HEX_HEAD;
         resultBytes[1] = 0x13;
@@ -41,7 +41,7 @@ public class BleProSend {
         for (int i = 0; i < meterAddressBytes.length; i++) {
             resultBytes[3 + i] = meterAddressBytes[i];
         }
-        byte[] numberBytes = HexUtil.dealInt(readNumber, 8);
+        byte[] numberBytes = HexUtil.dealLong(readNumber, 8);
         for (int i = 0; i < numberBytes.length; i++) {
             resultBytes[9 + i] = numberBytes[i];
         }
@@ -60,18 +60,10 @@ public class BleProSend {
         return resultBytes;
     }
 
-    public static void main(String[] args) {
-        byte[] bytes = getSettingData("112233445566", 2314, 120, 10);
-        System.out.println(HexUtil.formatHexString(bytes, true));
-
-        Calendar c = Calendar.getInstance();
-        c.set(2021, 2, 20);
-
-        Calendar c2 = Calendar.getInstance();
-        c2.set(2021, 3, 20);
-        //c2.add(Calendar.DAY_OF_MONTH, 1);
-
-        System.out.println(differentDaysByMillisecond(c.getTime(), c2.getTime()));
+    private static long getInitNumber(String dStr) {
+        double d = Double.parseDouble(dStr);
+        DecimalFormat df = new DecimalFormat("#.000");
+        return Long.parseLong(df.format(d).replace(".", ""));
     }
 
     /**
@@ -84,5 +76,10 @@ public class BleProSend {
     public static int differentDaysByMillisecond(Date date1, Date date2) {
         int days = (int) ((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
         return days;
+    }
+
+    public static void main(String[] args) {
+        byte[] bytes = getSettingData("112233445566", getInitNumber("3900000.293"), 10, 150);
+        System.out.println(HexUtil.formatHexString(bytes, true));
     }
 }
