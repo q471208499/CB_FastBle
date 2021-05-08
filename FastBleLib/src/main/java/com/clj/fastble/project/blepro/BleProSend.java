@@ -13,9 +13,9 @@ public class BleProSend {
 
     /**
      * 表设置
-     * //69 12 20 66 55 44 33 22 11 0F 00 00 00 3C 02 00 4D 16
+     * //69 13 20 66 55 44 33 22 11 0F 00 00 00 3C 00 02 00 4D 16
      * 69:包头固定69
-     * 12:长度
+     * 13:长度
      * 20:命令字，设置水表参数
      * 66 55 44 33 22 11:设置水表地址
      * 0F 00 00 00:设置水表底数
@@ -33,9 +33,9 @@ public class BleProSend {
      * @param signaling    信号 间隔
      */
     public static byte[] getSettingData(String meterAddress, int readNumber, int time, int signaling) {
-        byte[] resultBytes = new byte[18];
+        byte[] resultBytes = new byte[19];
         resultBytes[0] = BlePro.HEX_HEAD;
-        resultBytes[1] = 0x12;
+        resultBytes[1] = 0x13;
         resultBytes[2] = 0x20;
         byte[] meterAddressBytes = HexUtil.dealStr(meterAddress, 12, true);
         for (int i = 0; i < meterAddressBytes.length; i++) {
@@ -45,14 +45,18 @@ public class BleProSend {
         for (int i = 0; i < numberBytes.length; i++) {
             resultBytes[9 + i] = numberBytes[i];
         }
-        time = time / signaling;
-        resultBytes[13] = (byte) time;
+        //time = time / signaling;
+        //resultBytes[13] = (byte) time;
+        byte[] tBytes = HexUtil.dealInt(time, 4);
+        for (int i = 0; i < tBytes.length; i++) {
+            resultBytes[13 + i] = tBytes[i];
+        }
         byte[] sBytes = HexUtil.dealInt(signaling, 4);
         for (int i = 0; i < sBytes.length; i++) {
-            resultBytes[14 + i] = sBytes[i];
+            resultBytes[15 + i] = sBytes[i];
         }
-        resultBytes[16] = HexUtil.getCS(resultBytes);
-        resultBytes[17] = BlePro.HEX_END;
+        resultBytes[17] = HexUtil.getCS(resultBytes);
+        resultBytes[18] = BlePro.HEX_END;
         return resultBytes;
     }
 

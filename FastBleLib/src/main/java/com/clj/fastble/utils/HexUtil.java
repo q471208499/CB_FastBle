@@ -458,5 +458,6 @@ public class HexUtil {
     }
 
     public static void main(String[] args) {
+        System.out.println(HexUtil.formatHexString(dealInt(2, 4)));
     }
 }
