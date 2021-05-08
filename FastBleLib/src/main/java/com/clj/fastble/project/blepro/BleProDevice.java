@@ -40,8 +40,8 @@ public class BleProDevice {
         private Map<String, Object> dataMap;
         private final String KEY_METER_ADDRESS = "meterAddress";
         private final String KEY_METER_NUMBER = "meterNumber";
-        private final String KEY_TIME = "time";
-        private final String KEY_SIGNALING = "signaling";
+        private final String KEY_TIME = "time";//校时间隔
+        private final String KEY_SEND = "send";//发送间隔
         private final String KEY_DEVICE_ID = "deviceId";
         private final String KEY_SOFTWARE_DATE = "softwareDate";
         private final String KEY_HARDWARE_DATE = "hardwareDate";
@@ -77,31 +77,25 @@ public class BleProDevice {
             return hexStr == null || hexStr.isEmpty() || hexStr.length() % 2 == 1;
         }
 
-        /**
-         * 信号间隔 = 大端 转 小端 然后转 10进制
-         * 校时间隔 = 16进制 转 10进制 然后 乘以 信号间隔
-         *
-         * @return
-         */
         public Map<String, Object> getDataMap() {
             if (dataMap == null) {
                 String flowHex = HexUtil.bigOrSmallEndian(hexStr.substring(18, 26));
                 double flow = Long.valueOf(flowHex, 16) / 1000d;
 
-                String signalingStr = HexUtil.bigOrSmallEndian(hexStr.substring(28, 32));
-                int signaling = Integer.parseInt(signalingStr, 16);
+                String sendStr = HexUtil.bigOrSmallEndian(hexStr.substring(26, 30));
+                int send = Integer.parseInt(sendStr, 16);
 
-                String timeStr = HexUtil.bigOrSmallEndian(hexStr.substring(26, 28));
-                int time = Integer.parseInt(timeStr, 16) * signaling;
+                String timeStr = HexUtil.bigOrSmallEndian(hexStr.substring(30, 34));
+                int time = Integer.parseInt(timeStr, 16);
 
                 dataMap = new HashMap<>();
                 dataMap.put(KEY_METER_ADDRESS, HexUtil.bigOrSmallEndian(hexStr.substring(6, 18)));
                 dataMap.put(KEY_METER_NUMBER, flow);
                 dataMap.put(KEY_TIME, time);
-                dataMap.put(KEY_SIGNALING, signaling);
-                dataMap.put(KEY_DEVICE_ID, HexUtil.bigOrSmallEndian(hexStr.substring(32, 44)));
-                dataMap.put(KEY_SOFTWARE_DATE, HexUtil.bigOrSmallEndian(hexStr.substring(44, 48)));
-                dataMap.put(KEY_HARDWARE_DATE, HexUtil.bigOrSmallEndian(hexStr.substring(48, 52)));
+                dataMap.put(KEY_SEND, send);
+                dataMap.put(KEY_DEVICE_ID, HexUtil.bigOrSmallEndian(hexStr.substring(34, 46)));
+                dataMap.put(KEY_SOFTWARE_DATE, HexUtil.bigOrSmallEndian(hexStr.substring(46, 50)));
+                dataMap.put(KEY_HARDWARE_DATE, HexUtil.bigOrSmallEndian(hexStr.substring(50, 54)));
             }
             return dataMap;
         }
@@ -151,7 +145,7 @@ public class BleProDevice {
             if (dataMap == null) {
                 getDataMap();
             }
-            return (int) dataMap.get(KEY_SIGNALING);
+            return (int) dataMap.get(KEY_SEND);
         }
 
         /**
@@ -192,8 +186,7 @@ public class BleProDevice {
     }
 
     public static void main(String[] args) {
-        //比如收到的发送间隔是 0A，就是10秒，校时间隔是 0c 就是12, 那么就用12*10=120
-        BleProDevice.Receive receive = new BleProDevice.Receive("68 1c 21 00 00 00 00 00 00 0a 09 00 00 0c 0a 00 45 4c 42 2d 59 53 01 18 03 21 b7 16");
+        BleProDevice.Receive receive = new BleProDevice.Receive("68 1D 21 01 00 08 05 21 20 25 48 75 E8 0A 00 78 00 01 00 27 04 21 20 03 21 04 21 8D 16 ");
         System.out.println(receive.isValidForCommon());
         System.out.println(receive.getDataMap());
         System.out.println(receive.getDeviceId());
